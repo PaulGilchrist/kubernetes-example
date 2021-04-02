@@ -22,6 +22,8 @@ http://localhost:8081/odata/$metadata#contacts
 http://localhost:8081/odata/contacts
 ```
 
+There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully
+
 ## Appendix
 
 ### Optional troubleshooting commands
@@ -41,6 +43,7 @@ command: ["sleep", "infinity"] # used to start container without launching mondo
 ```
 kubectl delete service mongodb-api-service
 kubectl delete statefulSet mongodb-api0
+kubectl delete job mongodb-insert
 kubectl delete service mongodb0-service
 kubectl delete statefulSet mongodb0
 kubectl delete persistentVolumeClaim mongodb0-pvc
