@@ -1,43 +1,49 @@
-# Kubernetes / Docker Example
+# Kubernetes Setup
 
-This example was put together using Docker for Windows and it’s built in Kubernetes support.  This example shows how the YAML configuration file is assembled, allowing for multiple simultaneous containers, combined into pods, which are then scaled independently and exposed through load balancers.  Each load balancer also monitors the health of its underlying containers using tcpSocket monitoring, but could also be done using http requests or command tests.
+1) Create a folder named mongodb located at `/Users/Shared`.  This folder can be moved to any other root folder, as long as the file named mongodb.yaml has its `spec.local.path` changed accordingly.
 
-See [Configure Liveness and Readiness Probes]( https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/)
+2) Apply the templates needed to setup the pod.  It may take 30-60 seconds to complete the build if the container image is not already local
 
-This configuration is not restricted to Docker for Windows or its built in Kubernetes engine, and should work equally well on Azure, AWS, Google or any Kubernetes compliant cloud of on-premises environment.
-
-## Create
-
-```cmd
-kubectl create -f kube-deployment.yaml
+```
+kubectl apply -f mongodb.yaml
 ```
 
-## Update (live)
+3) You can now connect to the database using the following connection string and any client like `MongoDB Compass`
 
-```cmd
-kubectl apply -f kube-deployment.yaml
+```
+mongodb://localhost:27017
 ```
 
-## Delete
+3) You can now connect to the API using the following URLs and any browser or API tool such as `Postman`.  The database will initially be empty, so you may want to start by POSTing a new contact record
 
-```cmd
-kubectl delete service angular-service
-kubectl delete deployment angular-deployment
-kubectl delete service ballistics-service
-kubectl delete deployment ballistics-deployment
-kubectl delete service eve-missions-service
-kubectl delete deployment eve-missions-deployment
+```
+http://localhost:8081/odata
+http://localhost:8081/odata/$metadata#contacts
+http://localhost:8081/odata/contacts
 ```
 
-## Get Information at each level (high to low)
+## Appendix
 
-```cmd
-kubectl version
-kubectl get nodes
-kubectl get deployments
+### Optional troubleshooting commands
+
+```
+kubectl describe pvc
+kubectl get pod mongodb-0
+kubectl describe pods
+kubectl describe pod mongodb-0
 kubectl get services
-kubectl get pods
-kubectl describe deployment angular-deployment
-kubectl describe deployment ballistics-deployment
-kubectl describe deployment eve-missions-deployment
+kubectl describe service mongodb-service
+kubectl logs -f=true mongodb0-0
+command: ["sleep", "infinity"] # used to start container without launching mondod,  then enter container and start manually to observe any errors
+```
+
+### Complete Removal Steps
+```
+kubectl delete service mongodb-api-service
+kubectl delete statefulSet mongodb-api0
+kubectl delete service mongodb0-service
+kubectl delete statefulSet mongodb0
+kubectl delete persistentVolumeClaim mongodb0-pvc
+kubectl delete persistentVolume mongodb0-pv
+kubectl delete storageclass local-sc
 ```
