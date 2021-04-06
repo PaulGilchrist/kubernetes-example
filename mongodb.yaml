@@ -96,6 +96,10 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+      - name: init-wait-for-db
+        image: alpine
+        command: ["/bin/sh", "-c", "for i in $(seq 1 300); do nc -zvw1 mongodb-service 27017 && exit 0 || sleep 3; done; exit 1"]
       containers:
         - name: mongodb-insert
           env: 
@@ -152,4 +156,46 @@ spec:
     targetPort: 80
   selector:
     app: mongodb-api
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb-web
+spec:
+  serviceName: mongodb-web-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-web # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: mongodb-web # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mongodb-web
+        image: paulgilchrist/mongodb-web:latest
+        livenessProbe: # Defines the health checking
+          tcpSocket: # TCP probe
+            port: 80
+          initialDelaySeconds: 30 # length of time to wait for a pod to initialize after pod startup, before applying health checking
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 80
+          name: mongodb-web        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-web-service
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 80
+  selector:
+    app: mongodb-web
   type: LoadBalancer
