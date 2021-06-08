@@ -1,0 +1,274 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: local-sc
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: database-pvc
+spec:
+  storageClassName: local-sc
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  volumeName: database-pv
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: database-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-sc
+  local:
+    path: /Users/Shared/mongodb
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - docker-desktop
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+spec:
+  serviceName: database-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: database # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: database
+        command: ["mongod"]
+        args: ["--dbpath=/data/db", "--bind_ip_all"] # , "--auth", "--keyFile", "/data/db/keyfile", "--replSet", "rs0"
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+          name: database
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data/db # must match configmap dbPath and "command" args
+      volumes:
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: database-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - protocol: TCP
+    port: 27017
+    targetPort: 27017
+  selector:
+    app: database
+  type: LoadBalancer
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-data-management
+spec:
+  template:
+    spec:
+      containers:
+        - name: test-data-management
+          env: 
+            - name: mongoDbConnectionString
+              value: mongodb://database-service:27017 # uses the service name for the DB created above
+          image: paulgilchrist/mongodb-insert:latest
+      restartPolicy: Never
+  backoffLimit: 0
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: api
+spec:
+  serviceName: api-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: api # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: api
+        env: 
+        - name: ConnectionString
+          value: mongodb://database-service:27017 # uses the service name for the DB created above
+        - name: DatabaseName
+          value: mongotest
+        - name: ContactsCollectionName
+          value: contacts
+        - name: QueueHostName
+          value: queue-service
+        image: paulgilchrist/mongodb-api:latest
+        livenessProbe: # Defines the health checking
+          tcpSocket: # TCP probe
+            port: 80
+          initialDelaySeconds: 30 # length of time to wait for a pod to initialize after pod startup, before applying health checking
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 80
+          name: api        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 80
+  selector:
+    app: api
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  serviceName: web-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: web # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: web
+        image: paulgilchrist/mongodb-web:latest
+        livenessProbe: # Defines the health checking
+          tcpSocket: # TCP probe
+            port: 80
+          initialDelaySeconds: 30 # length of time to wait for a pod to initialize after pod startup, before applying health checking
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 80
+          name: web        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 80
+  selector:
+    app: web
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: queue
+spec:
+  serviceName: queue-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: queue # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: queue
+        env: 
+        - name: RABBITMQ_NODENAME
+          value: rabbit@localhost    
+        image: rabbitmq:3-management
+        ports:
+        - containerPort: 15672
+          name: http
+        - containerPort: 5672
+          name: amqp      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: queue-service
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - port: 15672
+    name: http
+    protocol: TCP
+    targetPort: 15672
+  - port: 5672
+    name: amqp
+    protocol: TCP
+    targetPort: 5672
+  selector:
+    app: queue
+  type: LoadBalancer
+---
+# Requires: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+# This is an example of combining multiple internal API (services) into one external API
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    # use the shared ingress-nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api-a(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 8081
+      - path: /api-b(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 8081
