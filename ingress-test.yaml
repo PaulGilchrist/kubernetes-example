@@ -245,7 +245,8 @@ spec:
     app: queue
   type: LoadBalancer
 ---
-# Requires: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+# Install Kubernetes ingress controller - https://github.com/kubernetes/ingress-nginx/ for latest version
+#    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
 # This is an example of combining multiple internal API (services) into one external API
 apiVersion: networking.k8s.io/v1
 kind: Ingress
