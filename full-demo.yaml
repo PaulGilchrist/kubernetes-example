@@ -108,21 +108,21 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: api
+  name: contacts-api
 spec:
-  serviceName: api-service
+  serviceName: contacts-api-service
   replicas: 1
   selector:
     matchLabels:
-      app: api # has to match .spec.template.metadata.labels
+      app: contacts-api # has to match .spec.template.metadata.labels
   template:
     metadata:
       labels:
-        app: api # has to match .spec.selector.matchLabels
+        app: contacts-api # has to match .spec.selector.matchLabels
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: api
+      - name: contacts-api
         env: 
         - name: ConnectionString
           value: mongodb://database-service:27017 # uses the service name for the DB created above
@@ -140,12 +140,12 @@ spec:
           timeoutSeconds: 1
         ports:
         - containerPort: 80
-          name: api        
+          name: contacts-api        
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-service
+  name: contacts-api-service
 spec:
   externalTrafficPolicy: Cluster
   ports:
@@ -153,7 +153,50 @@ spec:
     port: 8081
     targetPort: 80
   selector:
-    app: api
+    app: contacts-api
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: products-api
+spec:
+  serviceName: products-api-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-api # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: products-api # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: products-api
+        env: 
+        image: paulgilchrist/minimal-api:latest
+        livenessProbe: # Defines the health checking
+          tcpSocket: # TCP probe
+            port: 80
+          initialDelaySeconds: 30 # length of time to wait for a pod to initialize after pod startup, before applying health checking
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 80
+          name: products-api        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-api-service
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 80
+  selector:
+    app: products-api
   type: LoadBalancer
 ---
 apiVersion: apps/v1
@@ -244,3 +287,32 @@ spec:
   selector:
     app: queue
   type: LoadBalancer
+---
+# Install Kubernetes ingress controller - https://github.com/kubernetes/ingress-nginx/ for latest version
+#    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+# This is an example of combining multiple internal API (services) into one external API
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    # use the shared ingress-nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /contacts(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: contacts-api-service
+            port:
+              number: 8081
+      - path: /products(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: products-api-service
+            port:
+              number: 8081
