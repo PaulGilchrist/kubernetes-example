@@ -193,7 +193,7 @@ spec:
   externalTrafficPolicy: Cluster
   ports:
   - protocol: TCP
-    port: 8081
+    port: 8082
     targetPort: 80
   selector:
     app: products-api
@@ -315,4 +315,4 @@ spec:
           service:
             name: products-api-service
             port:
-              number: 8081
+              number: 8082
