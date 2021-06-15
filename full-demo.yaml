@@ -1,3 +1,9 @@
+# Install Kubernetes ingress controller before running this script - https://github.com/kubernetes/ingress-nginx/ for latest version
+#    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+# Apply this configuration
+#    kubectl apply -f full-demo.yaml
+# Remove this configuration
+#    kubectl delete -f full-demo.yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
@@ -5,20 +11,6 @@ metadata:
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: database-pvc
-spec:
-  storageClassName: local-sc
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-  volumeName: database-pv
-  resources:
-    requests:
-      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -42,6 +34,20 @@ spec:
           operator: In
           values:
             - docker-desktop
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: database-pvc
+spec:
+  storageClassName: local-sc
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  volumeName: database-pv
+  resources:
+    requests:
+      storage: 1Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -189,14 +195,14 @@ kind: Service
 metadata:
   name: contacts-api-service
 spec:
-  externalTrafficPolicy: Cluster
   ports:
-  - protocol: TCP
-    port: 8081
-    targetPort: 80
+    - port: 80
+      name: http
+    - port: 443
+      name: https
   selector:
     app: contacts-api
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -232,19 +238,19 @@ kind: Service
 metadata:
   name: products-api-service
 spec:
-  externalTrafficPolicy: Cluster
   ports:
-  - protocol: TCP
-    port: 8082
-    targetPort: 80
+    - port: 80
+      name: http
+    - port: 443
+      name: https
   selector:
     app: products-api
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: web
+  name: registry
 spec:
   serviceName: registry-service
   replicas: 1
@@ -330,31 +336,43 @@ spec:
     app: queue
   type: LoadBalancer
 ---
-# Install Kubernetes ingress controller - https://github.com/kubernetes/ingress-nginx/ for latest version
-#    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
-# This is an example of combining multiple internal API (services) into one external API
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-ingress
+  name: contacts-api-ingress
   annotations:
-    # use the shared ingress-nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - http:
+  - host: contacts.company.com
+    http:
       paths:
-      - path: /contacts(/|$)(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
             name: contacts-api-service
             port:
-              number: 8081
-      - path: /products(/|$)(.*)
+              number: 80
+---
+# Install Kubernetes ingress controller - https://github.com/kubernetes/ingress-nginx/ for latest version
+#    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+# This is an example of enforcing ingress rules on externally exposed services
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: products-api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: products.company.com
+    http:
+      paths:
+      - path: /
         pathType: Prefix
         backend:
           service:
             name: products-api-service
             port:
-              number: 8082
+              number: 80
