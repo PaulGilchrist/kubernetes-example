@@ -1,5 +1,7 @@
 # Install Kubernetes ingress controller before running this script - https://github.com/kubernetes/ingress-nginx/ for latest version
 #    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+# If using SSL/TLS for ingress, execute the command in file create-certificate.cmd, ensure your clients trusts this certificate, then create a secret using the new certificate
+#    kubectl create secret tls company-cert --key company.com.key --cert company.com.csr
 # Apply this configuration
 #    kubectl apply -f full-demo.yaml
 # Remove this configuration
@@ -341,8 +343,16 @@ kind: Ingress
 metadata:
   name: contacts-api-ingress
   annotations:
+    nginx.ingress.kubernetes.io/cors-allow-methods: "DELETE, GET, OPTIONS, PATCH, POST, PUT"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  tls:
+  - hosts:
+      - contacts.company.com
+    secretName: company-cert
   rules:
   - host: contacts.company.com
     http:
@@ -355,16 +365,21 @@ spec:
             port:
               number: 80
 ---
-# Install Kubernetes ingress controller - https://github.com/kubernetes/ingress-nginx/ for latest version
-#    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
-# This is an example of enforcing ingress rules on externally exposed services
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: products-api-ingress
   annotations:
+    nginx.ingress.kubernetes.io/cors-allow-methods: "DELETE, GET, OPTIONS, PATCH, POST, PUT"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "1" #Deliberatly limited so can demo HTTP 503 response
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  tls:
+  - hosts:
+      - products.company.com
+    secretName: company-cert
   rules:
   - host: products.company.com
     http:
