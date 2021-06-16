@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: products-api
+spec:
+  serviceName: products-api-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-api # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: products-api # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: products-api
+        env: 
+        image: paulgilchrist/minimal-api:latest
+        livenessProbe: # Defines the health checking
+          tcpSocket: # TCP probe
+            port: 80
+          initialDelaySeconds: 30 # length of time to wait for a pod to initialize after pod startup, before applying health checking
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 80
+          name: products-api

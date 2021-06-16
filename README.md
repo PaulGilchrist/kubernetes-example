@@ -15,21 +15,29 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
 
 1) Create a folder named `mongodb` located at `/Users/Shared`.  This folder can be moved to any other root folder, as long as the file named `full-demo.yaml` has its `spec.local.path` changed accordingly.
 
-2) Add `contacts.company.com` and `products.company.com `to your local `/private/etc/hosts` file pointing them to `127.0.0.1`
-   * This will allow the ingress controller to route specific DNS names to specific services
+2) Add the following lines to your local `/private/etc/hosts`
+   * This will allow the ingress controller to route specific DNS names to specific services and enforce TLS encryption
    * URL path routing is also supported but not demonstrated here
+
+```
+127.0.0.1	app.company.com
+127.0.0.1	contacts.company.com
+127.0.0.1	products.company.com
+127.0.0.1	queue.company.com
+127.0.0.1	registry.company.com
+```
 
 3) Install Kubernetes ingress controller before running this script (see https://github.com/kubernetes/ingress-nginx/) for latest version
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
 ```
-4) If using SSL/TLS for ingress, execute the steps in file `certificate-creation/README.md`
+4) To support SSL/TLS for ingress, execute the steps in file `certificate-creation/README.md`
 
 5) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local
 
 ```
-kubectl apply -f full-demo.yaml
+kubectl apply -f full-demo
 ```
 
    * There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully.  You should wait for this job to complete before proceeding to the remaining steps.
@@ -89,12 +97,12 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 
 ## Complete Removal
 ```
-kubectl delete -f full-demo.yaml
+kubectl delete -f full-demo
 ```
 
 ## Container Update Example (or job re-run)
 
 ```
 kubectl delete job test-data-management
-kubectl apply -f full-demo.yaml    
+kubectl apply -f full-demo
 ```

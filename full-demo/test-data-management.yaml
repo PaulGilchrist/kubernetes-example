@@ -1,0 +1,16 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-data-management
+spec:
+  template:
+    spec:
+      containers:
+        - name: test-data-management
+          env: 
+            - name: mongoDbConnectionString
+              value: mongodb://database-service:27017 # uses the service name for the DB created above
+          image: paulgilchrist/mongodb-insert:latest
+      restartPolicy: Never
+  backoffLimit: 0
