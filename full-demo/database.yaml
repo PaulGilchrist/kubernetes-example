@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: database
+  #namespace: demo
 spec:
   serviceName: database-service
   replicas: 1

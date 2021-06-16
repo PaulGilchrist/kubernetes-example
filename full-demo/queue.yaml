@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: queue
+  #namespace: demo
 spec:
   serviceName: queue-service
   replicas: 1
