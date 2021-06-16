@@ -1,7 +1,10 @@
-# Install Kubernetes ingress controller before running this script - https://github.com/kubernetes/ingress-nginx/ for latest version
-#    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
-# If using SSL/TLS for ingress, execute the command in file create-certificate.cmd, ensure your clients trusts this certificate, then create a secret using the new certificate
-#    kubectl create secret tls company-cert --key company.com.key --cert company.com.csr
+# Prerequisites
+#    Add contacts.company.com and products.company.com to your local "/private/etc/hosts" file pointing them to 127.0.0.1
+#        This will allow the ingress controller to route specific DNS names to specific services
+#        URL path routing is also supported but not demonstrated here
+#    Install Kubernetes ingress controller before running this script - https://github.com/kubernetes/ingress-nginx/ for latest version
+#        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+#    If using SSL/TLS for ingress, execute the steps in file certificate-creation/README.mcd
 # Apply this configuration
 #    kubectl apply -f full-demo.yaml
 # Remove this configuration
@@ -285,7 +288,7 @@ spec:
   externalTrafficPolicy: Cluster
   ports:
   - protocol: TCP
-    port: 8083
+    port: 8081
     targetPort: 80
   selector:
     app: registry
