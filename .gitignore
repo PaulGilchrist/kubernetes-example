@@ -1,5 +1,15 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# generated certificates
+company.com.crt
+company.com.csr
+company.com.csr.cnf
+company.com.key
+company.com.v3.ext
+rootCA.pem
+rootCA.key
+rootCA.srl
+
 # compiled output
 /dist
 /testing
