@@ -13,7 +13,7 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
 
 ## Kubernetes Setup
 
-1) Create a folder named `mongodb` located at `/Users/Shared`.  This folder can be moved to any other root folder, as long as the file named `full-demo.yaml` has its `spec.local.path` changed accordingly.
+1) Create a folder named `mongodb` located at `/Users/Shared/containerStorage`.  This folder can be moved to any other root folder, as long as the file named `full-demo/database-pv.yaml` has its `spec.local.path` changed accordingly.
 
 2) Add the following lines to your local `/private/etc/hosts`
    * This will allow the ingress controller to route specific DNS names to specific services and enforce TLS encryption
@@ -27,11 +27,14 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
 127.0.0.1	registry.company.com
 ```
 
-3) Install Kubernetes ingress controller before running this script (see https://github.com/kubernetes/ingress-nginx/) for latest version
+3) Install Kubernetes ingress controller before running this script (see https://kubernetes.github.io/ingress-nginx/deploy/) for latest version and installation steps.  **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+or
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.5/deploy/static/provider/cloud/deploy.yaml
 ```
+
 4) To support SSL/TLS for ingress, execute the steps in file `certificate-creation/README.md`
 
 5) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local
@@ -40,29 +43,39 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 kubectl apply -f full-demo
 ```
 
-   * There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully.  You should wait for this job to complete before proceeding to the remaining steps.
+## Testing
 
-6) You can now connect to the database any client like `MongoDB Compass` and the connection string of [mongodb://localhost:27017]()
+There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully.  You should wait for this job to complete before proceeding to the remaining steps.
 
-7) You can now connect to the API using the following URLs and any browser or API tool such as `Postman`.  The database will initially be empty, so you may want to start by POSTing a new contact record
+Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"
+
+6) You can now connect to the database using any client like `MongoDB Compass` and the connection string of [mongodb://localhost:27017]()
+
+7) You can connect to the message queue admin console using the URL https://queue.company.com, the username of `guest` and the password of `guest`
+
+8) You can connect to the APIs using the following URLs and any browser or API tool such as `Postman`.  The database will initially be empty, so you may want to start by POSTing a new contact record
 
 ```
 https://contacts.company.com/
 https://contacts.company.com/swagger
 https://contacts.company.com/$metadata
 https://contacts.company.com/$metadata#contacts
+https://products.company.com/
+https://products.company.com/swagger
+https://products.company.com/$metadata
+https://products.company.com/$metadata#products
 ```
    * You can similarly connect to the same 4 paths on the https://products.company.com/ API
 
-8) You can connect to both API Open API through the `service registry` at http://localhost:8081
+9) You can connect to both API Open API through the `service registry` at http://localhost:8081
 
-9) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
+10) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
 
 ```
 node receive-api.js
 ```
 
-9) You can connect to both demo `application's website` that at http://localhost:8080
+11) You can connect to both demo `application's website` that at http://localhost:8080
 
 
 # Appendix

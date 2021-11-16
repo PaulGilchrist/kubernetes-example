@@ -5,6 +5,7 @@ metadata:
   name: queue-service
   # namespace: default
 spec:
+  type: LoadBalancer # so a listner can be outside the cluster without needing an ingress
   ports:
     - port: 15672
       name: http
@@ -12,4 +13,3 @@ spec:
       name: amqp
   selector:
     app: queue
-  type: LoadBalancer # so a listner can be outside the cluster without needing an ingress

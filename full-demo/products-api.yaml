@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: products-api
-  #namespace: demo
+  # namespace: default
 spec:
   serviceName: products-api-service
   replicas: 2

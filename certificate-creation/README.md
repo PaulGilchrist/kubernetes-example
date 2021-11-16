@@ -8,6 +8,14 @@ sudo openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootC
 openssl req -new -sha256 -nodes -out company.com.csr -newkey rsa:2048 -keyout company.com.key -config <( cat company.com.csr.cnf )
 sudo openssl x509 -req -in company.com.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out company.com.crt -days 500 -sha256 -extfile company.com.v3.ext
 ```
+Example values:
+Country Name = US
+State or Provice Name = Michigan
+Locality Name = Detroit
+Organization Name = Local, LLC
+Organization Unit Name = Tech
+Common Name = www.company.com
+Email Address paul.gilchrist@outlook.com
 
 2) Add the new certificate to the operating system
 
