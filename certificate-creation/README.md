@@ -9,13 +9,13 @@ openssl req -new -sha256 -nodes -out company.com.csr -newkey rsa:2048 -keyout co
 sudo openssl x509 -req -in company.com.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out company.com.crt -days 500 -sha256 -extfile company.com.v3.ext
 ```
 Example values:
-Country Name = US
-State or Provice Name = Michigan
-Locality Name = Detroit
-Organization Name = Local, LLC
-Organization Unit Name = Tech
-Common Name = www.company.com
-Email Address paul.gilchrist@outlook.com
+* Country Name = US
+* State or Provice Name = Michigan
+* Locality Name = Detroit
+* Organization Name = Local, LLC
+* Organization Unit Name = Tech
+* Common Name = www.company.com
+* Email Address paul.gilchrist@outlook.com
 
 2) Add the new certificate to the operating system
 
@@ -24,6 +24,7 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 ```
 
 3) Open Keychain Access and trust the new certificate
+
 4) Add the certificate to a K8s secret
 
 ```
