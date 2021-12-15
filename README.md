@@ -43,17 +43,52 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 kubectl apply -f full-demo
 ```
 
+## Dapr Setup (optional)
+
+This demo uses RabbitMQ for messaging, MongoDB for state, and native kubernetes for telemetry and secrets but if wanting to abstract further with Dapr, follow the below steps.
+
+1) [Install HomeBrew](https://mac.install.guide/homebrew/index.html) (if not already installed)
+
+2) Use Homebrew to [install Helm](https://helm.sh/docs/intro/install/) 
+
+3) Use Homebrew to [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/)
+
+```
+arch -arm64 brew install dapr/tap/dapr-cli
+```
+
+4) [Setup Dapr on your Kubernetes cluster](https://github.com/dapr/quickstarts/tree/v1.4.0/hello-kubernetes#step-1---setup-dapr-on-your-kubernetes-cluster) including redis cache as both the state and pubsub store, or choose alternatives to redis such as mongoDB, rabbitMQ, or many others.
+
+```
+dapr init --kubernetes --wait
+dapr status -k
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install redis bitnami/redis
+
+kubectl apply -f dapr-examples/redis-state.yaml
+kubectl apply -f dapr-examples/redis-pubsub.yaml
+kubectl apply -f dapr-examples/redis.yaml
+```
+
+5) Optional - You can expose the Dapr dashboard to the URL http://localhost:9999 using the following command
+
+```
+dapr dashboard -k -p 9999
+```
+
 ## Testing
 
 There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully.  You should wait for this job to complete before proceeding to the remaining steps.
 
-Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"
+`Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"`
 
-6) You can now connect to the database using any client like `MongoDB Compass` and the connection string of [mongodb://localhost:27017]()
+1) You can now connect to the database using any client like `MongoDB Compass` and the connection string of [mongodb://localhost:27017]()
 
-7) You can connect to the message queue admin console using the URL https://queue.company.com, the username of `guest` and the password of `guest`
+2) You can connect to the message queue admin console using the URL https://queue.company.com, the username of `guest` and the password of `guest`
 
-8) You can connect to the APIs using the following URLs and any browser or API tool such as `Postman`.  The database will initially be empty, so you may want to start by POSTing a new contact record
+3) You can connect to the APIs using the following URLs and any browser or API tool such as `Postman`.  The database will initially be empty, so you may want to start by POSTing a new contact record
 
 ```
 https://contacts.company.com/
@@ -67,15 +102,15 @@ https://products.company.com/$metadata#products
 ```
    * You can similarly connect to the same 4 paths on the https://products.company.com/ API
 
-9) You can connect to both API Open API through the `service registry` at http://localhost:8081
+4) You can connect to both API Open API through the `service registry` at http://localhost:8081
 
-10) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
+5) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
 
 ```
 node receive-api.js
 ```
 
-11) You can connect to both demo `application's website` that at http://localhost:8080
+6) You can connect to both demo `application's website` that at http://localhost:8080
 
 
 # Appendix

@@ -1,6 +1,8 @@
 /* 
 Demo application to show publishing to an event topic using Dapr
-Requires sub-example.js to already be running using command:
+If running locally, first run the Dapr local sidecar
+    dapr run --app-id local-sidecar --dapr-http-port 3500
+Next run 'sub-example.js' from its working directory using command:
     dapr --app-id sub-example --app-port 3000 run node sub-example.js
 */
 'use strict';

@@ -14,6 +14,10 @@ spec:
     metadata:
       labels:
         app: queue # has to match .spec.selector.matchLabels
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "queue"
+        dapr.io/app-port: "5672"
     spec:
       terminationGracePeriodSeconds: 10
       containers:

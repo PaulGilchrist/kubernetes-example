@@ -14,6 +14,10 @@ spec:
     metadata:
       labels:
         app: database # has to match .spec.selector.matchLabels
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "database"
+        dapr.io/app-port: "27017"
     spec:
       terminationGracePeriodSeconds: 10
       containers:
