@@ -1,7 +1,7 @@
 // Used for displaying messages in the queue as the website updates contact data
 var amqp = require('amqplib/callback_api');
 
-amqp.connect('amqp://localhost', (error0, connection) => {
+amqp.connect('amqp://localhost/', (error0, connection) => {
     if (error0) {
         throw error0;
     }

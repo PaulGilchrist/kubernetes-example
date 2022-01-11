@@ -6,7 +6,7 @@ metadata:
   # namespace: default
 spec:
   serviceName: products-api-service
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: products-api # has to match .spec.template.metadata.labels
