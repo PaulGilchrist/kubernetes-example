@@ -31,6 +31,8 @@ spec:
           value: contacts
         - name: QueueHostName
           value: queue-service
+        - name: QueueName
+          value: api
         image: paulgilchrist/mongodb-api:latest
         livenessProbe: # Defines the health checking
           tcpSocket: # TCP probe
