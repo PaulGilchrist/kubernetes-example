@@ -29,6 +29,8 @@ spec:
           value: mongotest
         - name: ContactsCollectionName
           value: contacts
+        - name: QueueType
+          value: RabbitMQ
         - name: QueueHostName
           value: queue-service
         - name: QueueName
