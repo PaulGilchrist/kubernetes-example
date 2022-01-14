@@ -23,18 +23,22 @@ spec:
       containers:
       - name: contacts-api
         env: 
-        - name: ConnectionString
+        - name: DatabaseConnectionString
           value: mongodb://database-service:27017 # uses the service name for the DB created above
         - name: DatabaseName
           value: mongotest
         - name: ContactsCollectionName
           value: contacts
-        - name: QueueType
-          value: RabbitMQ
-        - name: QueueHostName
+        - name: QueueConnectionString # same as HostName for QueueType="RabbitMQ"
           value: queue-service
         - name: QueueName
           value: api
+        - name: QueueType # valid options are "AzureServiceBus", "Dapr", or "RabbitMQ"
+          value: RabbitMQ
+        - name: TelemetryConnectionString # blank if TelemetryType="Console"
+          value: 
+        - name: TelemetryType # valid options are "AppInsights", "Console", or "Zipkin"
+          value: Console
         image: paulgilchrist/mongodb-api:latest
         livenessProbe: # Defines the health checking
           tcpSocket: # TCP probe
