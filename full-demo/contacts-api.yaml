@@ -1,11 +1,10 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: contacts-api
   # namespace: default
 spec:
-  serviceName: contacts-api-service
   replicas: 1
   selector:
     matchLabels:

@@ -1,11 +1,10 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: registry
   # namespace: default
 spec:
-  serviceName: registry-service
   replicas: 1
   selector:
     matchLabels:

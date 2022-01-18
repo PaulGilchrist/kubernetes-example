@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: StatefulSet # StatefulSet allows pointing each to its own storage location
 metadata:
   name: database
   # namespace: default

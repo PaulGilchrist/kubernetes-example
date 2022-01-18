@@ -1,11 +1,10 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: web
   # namespace: default
 spec:
-  serviceName: web-service
   replicas: 1
   selector:
     matchLabels:

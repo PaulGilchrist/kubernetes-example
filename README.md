@@ -122,7 +122,7 @@ Reference - https://github.com/kubernetes/dashboard
 1) Install dashboard into K8s
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.0/aio/deploy/recommended.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
 ```
 
 2) Create dashboard admin user
