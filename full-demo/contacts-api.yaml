@@ -22,12 +22,14 @@ spec:
       containers:
       - name: contacts-api
         env: 
+        - name: BasePath
+          value: /contacts
+        - name: ContactsCollectionName
+          value: contacts
         - name: DatabaseConnectionString
           value: mongodb://database-service:27017 # uses the service name for the DB created above
         - name: DatabaseName
           value: mongotest
-        - name: ContactsCollectionName
-          value: contacts
         - name: QueueConnectionString # same as HostName for QueueType="RabbitMQ"
           value: queue-service
         - name: QueueName

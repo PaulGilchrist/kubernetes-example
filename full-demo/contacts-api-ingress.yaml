@@ -10,13 +10,13 @@ metadata:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/limit-rps: "100"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-    - host: contacts.company.com
+    - host: api.company.com
       http:
         paths:
-        - path: /
+        - path: /contacts/(.*)
           pathType: Prefix
           backend:
             service:
@@ -26,5 +26,5 @@ spec:
   # This section is only required if TLS is to be enabled for the Ingress
   tls:
     - hosts:
-      - contacts.company.com
+      - api.company.com
       secretName: company-cert
