@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contacts-api
+  # namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contacts-api # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: contacts-api # has to match .spec.selector.matchLabels
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "contacts-api"
+        dapr.io/app-port: "80"
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: contacts-api
+        env: 
+        - name: BasePath
+          value: /contacts
+        - name: ContactsCollectionName
+          value: contacts
+        - name: DatabaseConnectionString
+          value: mongodb://database-service:27017 # uses the service name for the DB created above
+        - name: DatabaseName
+          value: mongotest
+        - name: QueueConnectionString # same as HostName for QueueType="RabbitMQ"
+          value: queue-service
+        - name: QueueName
+          value: api
+        - name: QueueType # valid options are "AzureServiceBus", "Dapr", or "RabbitMQ"
+          value: RabbitMQ
+        - name: TelemetryConnectionString # blank if TelemetryType="Console"
+          value: 
+        - name: TelemetryType # valid options are "AppInsights", "Console", or "Zipkin"
+          value: Console
+        image: paulgilchrist/mongodb-api:latest
+        livenessProbe: # Defines the health checking
+          tcpSocket: # TCP probe
+            port: 80
+          initialDelaySeconds: 30 # length of time to wait for a pod to initialize after pod startup, before applying health checking
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 80
+          name: contacts-api

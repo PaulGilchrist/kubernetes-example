@@ -1,5 +1,7 @@
 # MacOS X Certificate Creation Steps
 
+This demo uses a self-signed certificate along with modifying the ;local computer's `hosts` file to point that domain name to `localhost`.  For production, you would instead use real certificates and DNS name resolution, modifying the YAML files as appropriate. 
+
 1) From within this folder, execute the following commands
 
 ```

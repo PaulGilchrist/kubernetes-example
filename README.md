@@ -13,7 +13,7 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
 
 ## Kubernetes Setup
 
-1) Create a folder named `mongodb` located at `/Users/Shared/containerStorage`.  This folder can be moved to any other root folder, as long as the file named `full-demo/database-pv.yaml` has its `spec.local.path` changed accordingly.
+1) Create a folder named `mongodb` located at `/Users/Shared/containerStorage`.  This folder can be moved to any other root folder, as long as the file named `local-demo/database-pv.yaml` has its `spec.local.path` changed accordingly.
 
 2) Add the following lines to your local `/private/etc/hosts`
    * This will allow the ingress controller to route specific DNS names to specific services and enforce TLS encryption
@@ -40,7 +40,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 5) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local
 
 ```
-kubectl apply -f full-demo
+kubectl apply -f local-demo
 ```
 
 ## Dapr Setup (optional)
@@ -145,12 +145,12 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 
 ## Complete Removal
 ```
-kubectl delete -f full-demo
+kubectl delete -f local-demo
 ```
 
 ## Container Update Example (or job re-run)
 
 ```
 kubectl delete job test-data-management
-kubectl apply -f full-demo
+kubectl apply -f local-demo
 ```

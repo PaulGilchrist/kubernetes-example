@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet # StatefulSet allows pointing each to its own storage location
+metadata:
+  name: queue
+  # namespace: default
+spec:
+  serviceName: queue-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue # has to match .spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: queue # has to match .spec.selector.matchLabels
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "queue"
+        dapr.io/app-port: "5672"
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: queue
+        env: 
+        - name: RABBITMQ_NODENAME
+          value: rabbit@localhost    
+        image: rabbitmq:3-management
+        ports:
+        - containerPort: 15672
+          name: http
+        - containerPort: 5672
+          name: amqp

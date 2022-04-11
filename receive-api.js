@@ -11,7 +11,7 @@ amqp.connect('amqp://localhost/', (error0, connection) => {
         }
         var queue = 'api';
         channel.assertQueue(queue, {
-            durable: false
+            durable: true
         });
         console.log(`Waiting for messages in ${queue}. To exit press CTRL+C`);
         channel.consume(queue, (msg) => {
