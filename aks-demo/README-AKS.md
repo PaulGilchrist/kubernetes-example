@@ -2,6 +2,29 @@
 
 This document describes just the differences between a local Kubernetes deployment and an Azure Kubernetes Services deployment.  First make sure to read the README.md file at the root of this project before making the changes listed here.
 
+## Azure Specific Steps
+
+1) Create the AKS cluster using Azure Portal or ARM template
+2) Install Azure CLI locally
+3) Login
+
+```
+az login
+az account set --subscription <your subscription ID here>
+az aks get-credentials --resource-group <your resource group here> --name <your AKS name here>
+```
+
+4) Install [helm](https://helm.sh/docs/intro/install/) locally then use it to install an nginx Kubernetes ingress gateway.
+
+```
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+```
+
+5) Go to a folder containing your-certificate.key and your-certificate.crt, and add them to Kubernetes as a secret
+
+```
+kubectl create secret tls company-cert --key <your-certificate.key filename> --cert <your-certificate.crt filename>
+```
 ## Differences between AKS and local Kubernetes Deployments
 
 * If you are building containers on an ARM platform like MacOS rather than AMD64, you have to rebuild the containers forcing arm64.
