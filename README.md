@@ -80,25 +80,21 @@ There is a job that runs to populate the database, the container will remain for
 
 `Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"`
 
-1) You can now connect to the database using any client like `MongoDB Compass` and the connection string of [mongodb://localhost:27017]()
+1) You can now connect to the database using any client like [MongoDB Compass](https://www.mongodb.com/products/compass) and the connection string of [mongodb://database.company.com:27017]()
 
-2) You can connect to the message queue admin console using the URL https://queue.company.com, the username of `guest` and the password of `guest`
+2) You can connect to the message queue admin console using the URL http://queue.company.com:15672, the username of `guest` and the password of `guest`
 
-3) You can connect to the APIs using the following URLs and any browser or API tool such as `Postman`.  The database will initially be empty, so you may want to start by POSTing a new contact record
-
-```
-https://api.company.com/
-```
+3) You can connect to the APIs using the URL https://api.company.com/.
    * This URL will connect to both the contacts and products OpenAPI (swagger) specifications, and allow testing either backend API service.
+
+4) You can connect to the application using the URL https://app.company.com/.
+
 
 5) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
 
 ```
 node receive-api.js
 ```
-
-6) You can connect to both demo `application's website` that at http://localhost:8080
-
 
 # Appendix
 
