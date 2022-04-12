@@ -25,6 +25,9 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 ```
 kubectl create secret tls company-cert --key <your-certificate.key filename> --cert <your-certificate.crt filename>
 ```
+
+6) Install [kubectx](https://github.com/ahmetb/kubectx) if you want to easily switch between your local context (cluster) and your AKS or other contexts.
+
 ## Differences between AKS and local Kubernetes Deployments
 
 * If you are building containers on an ARM platform like MacOS rather than AMD64, you have to rebuild the containers forcing arm64.
