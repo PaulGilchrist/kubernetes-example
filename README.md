@@ -16,28 +16,24 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
 1) Create a folder named `mongodb` located at `/Users/Shared/containerStorage`.  This folder can be moved to any other root folder, as long as the file named `local-demo/database-pv.yaml` has its `spec.local.path` changed accordingly.
 
 2) Add the following lines to your local `/private/etc/hosts`
-   * This will allow the ingress controller to route specific DNS names to specific services and enforce TLS encryption
-   * URL path routing is also supported but not demonstrated here
+   * This will allow the ingress controller to route 80/443 traffic to specific DNS names and URL paths to specific services and enforce TLS encryption, while also allowing the queue and database to route using their specific ports
 
 ```
 127.0.0.1	app.company.com
-127.0.0.1	contacts.company.com
-127.0.0.1	products.company.com
+127.0.0.1	api.company.com
 127.0.0.1	queue.company.com
-127.0.0.1	registry.company.com
+127.0.0.1	dataabse.company.com
 ```
 
-3) Install Kubernetes ingress controller before running this script (see https://kubernetes.github.io/ingress-nginx/deploy/) for latest version and installation steps.  **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
+4) [Install Helm](https://helm.sh/docs/intro/install/) locally then use it to install an nginx Kubernetes ingress gateway. **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
 
 ```
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
-or
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.5/deploy/static/provider/cloud/deploy.yaml
 ```
 
-4) To support SSL/TLS for ingress, execute the steps in file `certificate-creation/README.md`
+4) To support SSL/TLS for ingress, execute the steps in file `certificate-creation/README-cert-creation.md` to create a self-signed certificate or the steps in file `certificate-creation/README-pfx-to-crt.md` if you already have a public certificate.
 
-5) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local
+5) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local.
 
 ```
 kubectl apply -f local-demo
@@ -45,7 +41,7 @@ kubectl apply -f local-demo
 
 ## Dapr Setup (optional)
 
-This demo uses RabbitMQ for messaging, MongoDB for state, and native kubernetes for telemetry and secrets but if wanting to abstract further with Dapr, follow the below steps.
+This demo uses RabbitMQ for messaging, MongoDB for state, and native Kubernetes for telemetry and secrets but if wanting to abstract further with Dapr, follow the below steps.
 
 1) [Install HomeBrew](https://mac.install.guide/homebrew/index.html) (if not already installed)
 
@@ -91,18 +87,9 @@ There is a job that runs to populate the database, the container will remain for
 3) You can connect to the APIs using the following URLs and any browser or API tool such as `Postman`.  The database will initially be empty, so you may want to start by POSTing a new contact record
 
 ```
-https://contacts.company.com/
-https://contacts.company.com/swagger
-https://contacts.company.com/$metadata
-https://contacts.company.com/$metadata#contacts
-https://products.company.com/
-https://products.company.com/swagger
-https://products.company.com/$metadata
-https://products.company.com/$metadata#products
+https://api.company.com/
 ```
-   * You can similarly connect to the same 4 paths on the https://products.company.com/ API
-
-4) You can connect to both API Open API through the `service registry` at http://localhost:8081
+   * This URL will connect to both the contacts and products OpenAPI (swagger) specifications, and allow testing either backend API service.
 
 5) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
 
@@ -116,6 +103,8 @@ node receive-api.js
 # Appendix
 
 ## Kubernetes Dashboard
+
+Although you can use these steps to install the Kubernetes dashboard, it is recommended to use [Lens Dekstop](https://k8slens.dev) instead.
 
 Reference - https://github.com/kubernetes/dashboard
 
