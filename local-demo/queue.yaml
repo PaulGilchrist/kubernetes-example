@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet # StatefulSet allows pointing each to its own storage location
 metadata:
   name: queue
-  # namespace: default
+  namespace: demo
 spec:
   serviceName: queue-service
   replicas: 1

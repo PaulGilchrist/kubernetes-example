@@ -3,9 +3,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: queue-service
+  namespace: demo
   annotations:
     service.beta.kubernetes.io/azure-load-balancer-resource-group: MC_AKS_testing_westus  
-  # namespace: default
 spec:
   loadBalancerIP: 20.47.110.134 # Must be standard if AKS LoadBalancer is standard, basic if AKS LoadBalancer is basic
   ports:
