@@ -139,3 +139,12 @@ kubectl delete -f local-demo
 kubectl delete job test-data-management
 kubectl apply -f local-demo
 ```
+
+## Removing an Old Cluster From Config
+
+```
+kubectl config view
+kubectl config unset users.clusterUser_AKS_testing
+kubectl config unset contexts.testing
+kubectl config unset clusters.testing
+```

@@ -5,9 +5,9 @@ metadata:
   name: queue-service
   namespace: demo
   annotations:
-    service.beta.kubernetes.io/azure-load-balancer-resource-group: MC_AKS_testing_westus  
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: mc_aks_testing_westus  
 spec:
-  loadBalancerIP: 20.47.110.134 # Must be standard if AKS LoadBalancer is standard, basic if AKS LoadBalancer is basic
+  loadBalancerIP: 20.47.116.101 # Must be standard if AKS LoadBalancer is standard, basic if AKS LoadBalancer is basic
   ports:
     - port: 15672
       name: http
