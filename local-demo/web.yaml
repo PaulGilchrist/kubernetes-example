@@ -13,10 +13,6 @@ spec:
     metadata:
       labels:
         app: web # has to match .spec.selector.matchLabels
-      annotations:
-        dapr.io/enabled: "true"
-        dapr.io/app-id: "web"
-        dapr.io/app-port: "80"
     spec:
       terminationGracePeriodSeconds: 10
       containers:

@@ -13,10 +13,6 @@ spec:
     metadata:
       labels:
         app: registry # has to match .spec.selector.matchLabels
-      annotations:
-        dapr.io/enabled: "true"
-        dapr.io/app-id: "registry"
-        dapr.io/app-port: "80"
     spec:
       terminationGracePeriodSeconds: 10
       containers:

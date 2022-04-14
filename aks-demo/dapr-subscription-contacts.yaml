@@ -1,0 +1,10 @@
+apiVersion: dapr.io/v1alpha1
+kind: Subscription
+metadata:
+  name: dapr-subscription-contacts
+spec:
+  topic: contacts
+  route: /contacts
+  pubsubname: dapr-pubsub-rabbitmq
+scopes:
+- contacts-api # This demo only has contacts-api publishing, and no subscriber so this is example subscription only
