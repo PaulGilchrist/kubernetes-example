@@ -14,7 +14,7 @@ spec:
       labels:
         app: contacts-api # has to match .spec.selector.matchLabels
       annotations:
-        dapr.io/enabled: "true"
+        dapr.io/enabled: "true" # troubleshoot:  kubectl logs -l app=dapr-sidecar-injector -n dapr-system
         dapr.io/app-id: "contacts-api"
         dapr.io/app-port: "80"
     spec:
@@ -35,12 +35,13 @@ spec:
         - name: QueueName
           value: contacts
         - name: QueueType # valid options are "AzureServiceBus", "Dapr", or "RabbitMQ"
-          value: RabbitMQ
+          value: Dapr
         - name: TelemetryConnectionString # blank if TelemetryType="Console"
           value: 
         - name: TelemetryType # valid options are "AppInsights", "Console", or "Zipkin"
           value: Console
         image: paulgilchrist/mongodb-api:latest
+        imagePullPolicy: Always
         livenessProbe: # Defines the health checking
           tcpSocket: # TCP probe
             port: 80

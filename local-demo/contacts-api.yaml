@@ -41,6 +41,7 @@ spec:
         - name: TelemetryType # valid options are "AppInsights", "Console", or "Zipkin"
           value: Console
         image: paulgilchrist/mongodb-api:latest
+        imagePullPolicy: Always
         livenessProbe: # Defines the health checking
           tcpSocket: # TCP probe
             port: 80

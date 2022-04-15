@@ -28,6 +28,8 @@ kubectl create secret tls company-cert --key <your-certificate.key filename> --c
 
 6) Install [kubectx](https://github.com/ahmetb/kubectx) if you want to easily switch between your local context (cluster) and your AKS or other contexts.
 
+7) Make sure to set a valid Azure Service Bus connection string in `dapr-pubsub-contacts.yaml` or if not using dapr, remove its annotations from `contacts-api.yaml` and make sure it is not selected for the `QueueType` environment variable.
+
 ## Differences between AKS and local Kubernetes Deployments
 
 * If you are building containers on an ARM platform like MacOS rather than AMD64, you have to rebuild the containers forcing arm64.
