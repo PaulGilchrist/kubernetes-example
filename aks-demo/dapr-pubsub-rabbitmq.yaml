@@ -15,9 +15,39 @@ spec:
     value: "false"
   - name: autoAck
     value: "false"
-  - name: reconnectWait
+  - name: deliveryMode
     value: "0"
-  - name: concurrency
+  - name: requeueInFailure
+    value: "false"
+  - name: prefetchCount
+    value: "0"
+  - name: reconnectWait
+    value: "1"
+  - name: concurrencyMode
     value: parallel
+  - name: backOffPolicy
+    value: "exponential"
+  - name: backOffDuration
+    value: "5000"
+  - name: backOffInitialInterval
+    value: "1000"
+  - name: backOffMaxInterval
+    value: "60000"
+  - name: backOffMaxRetries
+    value: "5"
+  - name: backOffRandomizationFactor
+    value: "0.5"
+  - name: backOffMultiplier
+    value: "2"
+  - name: backOffMaxElapsedTime
+    value: "15m"
+  - name: enableDeadLetter
+    value: "false"
+  - name: maxLen
+    value: "1000"
+  - name: maxLenBytes
+    value: "1048576"
+  - name: exchangeKind
+    value: "topic"
 scopes:
   - contacts-api
