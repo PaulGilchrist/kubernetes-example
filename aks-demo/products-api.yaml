@@ -13,6 +13,10 @@ spec:
     metadata:
       labels:
         app: products-api # has to match .spec.selector.matchLabels
+      annotations:
+        # dapr.io/enabled: "true"
+        # dapr.io/app-id: "products-api"
+        # dapr.io/app-port: "80"
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -21,6 +25,7 @@ spec:
         - name: BasePath
           value: /products
         image: paulgilchrist/minimal-api:latest
+        imagePullPolicy: Always
         livenessProbe: # Defines the health checking
           tcpSocket: # TCP probe
             port: 80
