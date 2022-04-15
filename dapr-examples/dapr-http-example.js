@@ -1,7 +1,7 @@
 /* 
 Demo application to show publishing to an event topic using Dapr without a client (http://localhost)
 If running locally, first run the Dapr local sidecar with an app-id that is part of the pubsub "scope"
-    dapr run --app-id contacts-api --dapr-http-port 3500
+    dapr run --app-id contacts-api --app-port 3000 --dapr-http-port 3500
 
 If this was a subscribe example you would need to use dapr to launch the application so it can bind to the subscription
     dapr --app-id contacts-api --app-port 3000 run node dapr-http-example.js
