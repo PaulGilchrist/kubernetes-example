@@ -19,10 +19,10 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
    * This will allow the ingress controller to route 80/443 traffic to specific DNS names and URL paths to specific services and enforce TLS encryption, while also allowing the queue and database to route using their specific ports
 
 ```
-127.0.0.1	app.company.com
-127.0.0.1	api.company.com
-127.0.0.1	queue.company.com
-127.0.0.1	dataabse.company.com
+127.0.0.1	app.local.com
+127.0.0.1	api.local.com
+127.0.0.1	queue.local.com
+127.0.0.1	dataabse.local.com
 ```
 
 4) [Install Helm](https://helm.sh/docs/intro/install/) locally then use it to install an nginx Kubernetes ingress gateway. **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
@@ -108,14 +108,14 @@ There is a job that runs to populate the database, the container will remain for
 
 `Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"`
 
-1) You can now connect to the database using any client like [MongoDB Compass](https://www.mongodb.com/products/compass) and the connection string of [mongodb://database.company.com:27017]()
+1) You can now connect to the database using any client like [MongoDB Compass](https://www.mongodb.com/products/compass) and the connection string of [mongodb://database.local.com:27017]()
 
-2) You can connect to the message queue admin console using the URL http://queue.company.com:15672, the username of `guest` and the password of `guest`
+2) You can connect to the message queue admin console using the URL http://queue.local.com:15672, the username of `guest` and the password of `guest`
 
-3) You can connect to the APIs using the URL https://api.company.com/.
+3) You can connect to the APIs using the URL https://api.local.com/.
    * This URL will connect to both the contacts and products OpenAPI (swagger) specifications, and allow testing either backend API service.
 
-4) You can connect to the application using the URL https://app.company.com/.
+4) You can connect to the application using the URL https://app.local.com/.
 
 
 5) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:

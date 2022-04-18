@@ -20,7 +20,7 @@ az aks get-credentials --resource-group <your resource group here> --name <your 
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 ```
 
-5) Go to a folder containing your-certificate.key and your-certificate.crt, and add them to Kubernetes as a secret
+5) Go to a folder containing your-certificate.key and your-certificate.crt, and add them to Kubernetes as a secret.  If public DNS is not configured for these names already, optionally add them to your local `hosts` file.
 
 ```
 kubectl create secret tls company-cert --key <your-certificate.key filename> --cert <your-certificate.crt filename>

@@ -13,7 +13,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: api.company.com
+    - host: api.local.com
       http:
         paths:
         - path: /
@@ -26,5 +26,5 @@ spec:
   # This section is only required if TLS is to be enabled for the Ingress
   tls:
     - hosts:
-      - api.company.com
-      secretName: company-cert
+      - api.local.com
+      secretName: local-cert

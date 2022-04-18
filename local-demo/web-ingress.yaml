@@ -12,12 +12,8 @@ metadata:
     nginx.ingress.kubernetes.io/limit-rps: "100"
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  tls:
-  - hosts:
-      - app.company.com
-    secretName: company-cert
   rules:
-  - host: app.company.com
+  - host: app.local.com
     http:
       paths:
       - path: /
@@ -27,3 +23,8 @@ spec:
             name: web-service
             port:
               number: 80
+  # This section is only required if TLS is to be enabled for the Ingress
+  tls:
+    - hosts:
+      - app.local.com
+      secretName: local-cert
