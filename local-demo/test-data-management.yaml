@@ -11,7 +11,7 @@ spec:
         - name: test-data-management
           env: 
             - name: mongoDbConnectionString
-              value: mongodb://database-service:27017 # uses the service name for the DB created above
+              value: mongodb://admin:mongodb-k8s-demo@database-service:27017 # uses the service name for the DB created above
           image: paulgilchrist/mongodb-insert:latest
       restartPolicy: Never
   backoffLimit: 0

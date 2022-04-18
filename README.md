@@ -31,13 +31,41 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 ```
 
-4) To support SSL/TLS for ingress, execute the steps in file `certificate-creation/README-cert-creation.md` to create a self-signed certificate or the steps in file `certificate-creation/README-pfx-to-crt.md` if you already have a public certificate.
+5) To support SSL/TLS for ingress, execute the steps in file `certificate-creation/README-cert-creation.md` to create a self-signed certificate or the steps in file `certificate-creation/README-pfx-to-crt.md` if you already have a public certificate.
 
-5) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local.
+6) Create the namespace
+```
+kubectl create namespace demo
+```
+
+7) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local.
 
 ```
 kubectl apply -f local-demo
 ```
+
+8) Connect to the database container's console and setup and admin account
+```
+kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
+
+mongo
+use admin
+db.createUser({
+    user: "admin",
+    pwd: "mongodb-k8s-demo",
+    roles: [
+        { role: "userAdminAnyDatabase", db: "admin" },
+        { role: "readWriteAnyDatabase", db: "admin" },
+        { role: "dbAdminAnyDatabase", db: "admin" },
+        { role: "clusterAdmin", db: "admin" }
+    ],
+    mechanisms:[ "SCRAM-SHA-1" ]
+})
+exit
+exit
+```
+
+
 
 ## Dapr Setup (optional)
 

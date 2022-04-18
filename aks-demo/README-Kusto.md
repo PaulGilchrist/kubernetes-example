@@ -20,7 +20,7 @@ ContainerInventory
 ## Get container Log from container ID
 ```sql
 ContainerLog
-| where ContainerID == '46140e20dec6f193423f3cd65deda90710ae9e5741a94f92a45e10a960328c15'
+| where ContainerID == 'f75bcebb82daa3581ab58853b45d6500d428c1bd1f671ef4cabe294c89db0fc5'
 | project TimeGenerated, LogEntry
 | order by TimeGenerated desc
 ```
