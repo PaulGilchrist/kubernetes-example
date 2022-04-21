@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: StatefulSet # StatefulSet allows pointing each to its own storage location
 metadata:
