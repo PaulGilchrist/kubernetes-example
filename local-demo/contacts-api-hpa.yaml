@@ -26,5 +26,22 @@ spec:
       target:
         type: Utilization
         averageValue: 1Gi
-
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 30 # production should use default of 300
+      policies:
+      - type: Pods # default = Percent
+        value: 1 # default = 100
+        periodSeconds: 15
+      selectPolicy: Min
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      # - type: Percent
+      #   value: 100
+      #   periodSeconds: 15
+      - type: Pods
+        value: 1 # default = 4
+        periodSeconds: 15
+      selectPolicy: Max
 

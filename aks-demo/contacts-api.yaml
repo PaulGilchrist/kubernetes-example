@@ -42,10 +42,11 @@ spec:
         image: paulgilchrist/mongodb-api:latest
         imagePullPolicy: Always
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: /health
             port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /health
