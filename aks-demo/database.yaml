@@ -26,6 +26,16 @@ spec:
         volumeMounts:
         - name: mongodb-data
           mountPath: /data/db # must match configmap dbPath and "command" args
+        readinessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 15
+          periodSeconds: 15
       volumes:
       - name: mongodb-data
         persistentVolumeClaim:

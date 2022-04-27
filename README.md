@@ -38,7 +38,7 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 kubectl create namespace demo
 ```
 
-7) Install a [metrics server]([https://github.com/kubernetes-sigs/metrics-server#deployment) by first copying [YAML](https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml) followed by adding `--kubelet-insecure-tls` to the `args` section, changing `--metric-resolution=30s` from 15s to 30s, and then applying the file using `kubectl`.  This step is not required for Azure AKS, and only needed for local Kubernetes.
+7) Install a [metrics server]([https://github.com/kubernetes-sigs/metrics-server#deployment) by first copying [YAML](https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml) followed by adding `--kubelet-insecure-tls` to the `args` section, changing `--metric-resolution=90s` from 15s to 90s, and then applying the file using `kubectl`.  This step is not required for Azure AKS, and only needed for local Kubernetes.
 
 * Test readiness
 ```
