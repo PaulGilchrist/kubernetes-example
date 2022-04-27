@@ -101,3 +101,5 @@ spec:
     app: database
     type: LoadBalancer
 ```
+
+* Azure installs a metrics-server when AKS is built where local Kubernetes requires manual installation

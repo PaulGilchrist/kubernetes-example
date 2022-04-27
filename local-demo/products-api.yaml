@@ -4,7 +4,7 @@ metadata:
   name: products-api
   namespace: demo
 spec:
-  replicas: 1
+  #replicas: 1 # remove this if using horizontal auto-scaling
   selector:
     matchLabels:
       app: products-api # has to match .spec.template.metadata.labels
@@ -33,3 +33,10 @@ spec:
         ports:
         - containerPort: 80
           name: products-api
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1.5Gi
+          requests:
+            cpu: 250m
+            memory: 0.5Gi

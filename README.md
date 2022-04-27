@@ -38,13 +38,15 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 kubectl create namespace demo
 ```
 
-7) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local.
+7) Install a [metrics server]([https://github.com/kubernetes-sigs/metrics-server#deployment) by first copying [YAML](https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml) followed by adding `--kubelet-insecure-tls` to the `args` section, and then applying the file using `kubectl`.  This step is not required for Azure AKS, and only needed for local Kubernetes.
+
+8) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local.
 
 ```
 kubectl apply -f local-demo
 ```
 
-8) Connect to the database container's console and setup and admin account
+9) Connect to the database container's console and setup and admin account
 ```
 kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
 
@@ -64,8 +66,6 @@ db.createUser({
 exit
 exit
 ```
-
-
 
 ## Dapr Setup (optional)
 
@@ -116,7 +116,6 @@ There is a job that runs to populate the database, the container will remain for
    * This URL will connect to both the contacts and products OpenAPI (swagger) specifications, and allow testing either backend API service.
 
 4) You can connect to the application using the URL https://app.local.com/.
-
 
 5) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
 
