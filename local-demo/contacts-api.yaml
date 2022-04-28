@@ -26,7 +26,11 @@ spec:
         - name: ContactsCollectionName
           value: contacts
         - name: DatabaseConnectionString
-          value: mongodb://admin:mongodb-k8s-demo@database-service:27017 # uses the service name for the DB created above
+          valueFrom:
+            secretKeyRef:
+              name: contacts-api-secrets
+              key: DatabaseConnectionString
+              optional: false
         - name: DatabaseName
           value: mongotest
         - name: QueueConnectionString # same as HostName for QueueType="RabbitMQ"

@@ -9,8 +9,12 @@ spec:
       containers:
         - name: test-data-management
           env: 
-            - name: mongoDbConnectionString
-              value: mongodb://admin:mongodb-k8s-demo@database-service:27017 # uses the service name for the DB created above
+          - name: mongoDbConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: test-data-management-secrets
+                key: mongoDbConnectionString
+                optional: false
           image: paulgilchrist/mongodb-insert:latest
       restartPolicy: Never
   backoffLimit: 0
