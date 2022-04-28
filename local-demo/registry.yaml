@@ -16,7 +16,8 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: registry
-        image: paulgilchrist/swagger-ui:latest
+        image: paulgilchrist/swagger-ui:1.0.0
+        imagePullPolicy: Always
         readinessProbe:
           tcpSocket:
             port: 80

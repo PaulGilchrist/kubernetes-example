@@ -1,29 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: products-api
+  name: products-api-v2
   namespace: demo
 spec:
   #replicas: 1 # remove this if using horizontal auto-scaling
   selector:
     matchLabels:
-      app: products-api # has to match .spec.template.metadata.labels
+      app: products-api-v2 # has to match .spec.template.metadata.labels
   template:
     metadata:
       labels:
-        app: products-api # has to match .spec.selector.matchLabels
+        app: products-api-v2 # has to match .spec.selector.matchLabels
       annotations:
         # dapr.io/enabled: "true"
-        # dapr.io/app-id: "products-api"
+        # dapr.io/app-id: "products-api-v2"
         # dapr.io/app-port: "80"
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: products-api
+      - name: products-api-v2
         env: 
         - name: BasePath
-          value: /products
-        image: paulgilchrist/minimal-api:latest
+          value: /products/v2
+        image: paulgilchrist/minimal-api:1.2.0
         imagePullPolicy: Always
         readinessProbe:
           tcpSocket:
@@ -37,7 +37,7 @@ spec:
           periodSeconds: 15
         ports:
         - containerPort: 80
-          name: products-api
+          name: products-api-v2
         resources:
           limits:
             cpu: 100m
