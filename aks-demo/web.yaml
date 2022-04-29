@@ -17,6 +17,7 @@ spec:
       containers:
       - name: web
         image: paulgilchrist/mongodb-web:latest
+        imagePullPolicy: Always
         readinessProbe:
           tcpSocket:
             port: 80

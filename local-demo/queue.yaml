@@ -21,6 +21,7 @@ spec:
         - name: RABBITMQ_NODENAME
           value: rabbit@localhost    
         image: rabbitmq:3-management
+        imagePullPolicy: Always
         ports:
         - containerPort: 15672
           name: http

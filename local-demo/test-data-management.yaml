@@ -16,5 +16,6 @@ spec:
                 key: mongoDbConnectionString
                 optional: false
           image: paulgilchrist/mongodb-insert:latest
+          imagePullPolicy: Always
       restartPolicy: Never
   backoffLimit: 0
