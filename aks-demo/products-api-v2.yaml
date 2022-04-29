@@ -17,7 +17,7 @@ spec:
         # dapr.io/app-id: "products-api-v2"
         # dapr.io/app-port: "80"
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 30
       containers:
       - name: products-api-v2
         env: 

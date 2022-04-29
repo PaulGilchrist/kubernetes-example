@@ -17,7 +17,7 @@ spec:
         # dapr.io/app-id: "contacts-api"
         # dapr.io/app-port: "80"
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 30
       containers:
       - name: contacts-api
         env: 

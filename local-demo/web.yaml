@@ -13,10 +13,11 @@ spec:
       labels:
         app: web # has to match .spec.selector.matchLabels
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 30
       containers:
       - name: web
         image: paulgilchrist/mongodb-web:latest
+        imagePullPolicy: Always
         readinessProbe:
           tcpSocket:
             port: 80

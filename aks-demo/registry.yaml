@@ -13,7 +13,7 @@ spec:
       labels:
         app: registry # has to match .spec.selector.matchLabels
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 30
       containers:
       - name: registry
         image: paulgilchrist/swagger-ui:1.0.0
