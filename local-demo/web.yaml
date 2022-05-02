@@ -18,7 +18,7 @@ spec:
       - name: web
         env: 
         - name: API_URL
-          value: https://api.local.com
+          value: https://api.local.com/contacts
         image: paulgilchrist/mongodb-web:latest
         imagePullPolicy: Always
         readinessProbe:
