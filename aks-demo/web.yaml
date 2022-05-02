@@ -16,6 +16,9 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: web
+        env: 
+        - name: API_URL
+          value: https://api.company.com
         image: paulgilchrist/mongodb-web:latest
         imagePullPolicy: Always
         readinessProbe:

@@ -16,6 +16,9 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: registry
+        env: 
+        - name: API_URL
+          value: https://api.company.com
         image: paulgilchrist/swagger-ui:latest
         imagePullPolicy: Always
         readinessProbe:
