@@ -58,7 +58,7 @@ spec:
             port: 80
           failureThreshold: 5
           initialDelaySeconds: 10
-          periodSeconds: 60
+          periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 30
         livenessProbe:
@@ -75,8 +75,8 @@ spec:
           name: contacts-api
         resources:
           limits:
-            cpu: 500m
+            cpu: 80m
             memory: 1.5Gi
           requests:
-            cpu: 250m
+            cpu: 10m
             memory: 0.5Gi
