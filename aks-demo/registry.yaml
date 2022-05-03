@@ -5,6 +5,7 @@ metadata:
   namespace: demo
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: registry # has to match .spec.template.metadata.labels

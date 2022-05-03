@@ -5,6 +5,7 @@ metadata:
   namespace: demo
 spec:
   #replicas: 1 # remove this if using horizontal auto-scaling
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: products-api-v1 # has to match .spec.template.metadata.labels
