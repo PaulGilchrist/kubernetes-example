@@ -30,19 +30,19 @@ spec:
           tcpSocket:
             port: 80
           initialDelaySeconds: 5
-          periodSeconds: 10
+          periodSeconds: 5
         livenessProbe:
           tcpSocket:
             port: 80
-          initialDelaySeconds: 15
+          initialDelaySeconds: 10
           periodSeconds: 15
         ports:
         - containerPort: 80
           name: products-api-v1
         resources:
           limits:
-            cpu: 100m
+            cpu: 500m
             memory: 1.5Gi
           requests:
-            cpu: 50m
+            cpu: 250m
             memory: 0.5Gi
