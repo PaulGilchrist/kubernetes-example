@@ -28,16 +28,22 @@ spec:
           value: https://api.local.com
         image: paulgilchrist/swagger-ui:latest
         imagePullPolicy: Always
-        readinessProbe:
-          tcpSocket:
+        readinessProbe: # More heavyweight check than liveness with more details returned
+          tcpSocket: # Always prefer to use httpGet if supported by container
             port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 30 
         livenessProbe:
           tcpSocket:
             port: 80
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 5
         ports:
         - containerPort: 80
           name: registry

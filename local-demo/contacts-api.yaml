@@ -52,17 +52,24 @@ spec:
           value: Console
         image: paulgilchrist/mongodb-api:latest
         imagePullPolicy: Always
-        readinessProbe:
-          tcpSocket:
+        readinessProbe: # More heavyweight check than liveness with more details returned
+          httpGet:
+            path: /health/readiness
             port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 30
         livenessProbe:
           httpGet:
-            path: /health
+            path: /health/liveness
             port: 80
+          failureThreshold: 3
           initialDelaySeconds: 10
           periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 5
         ports:
         - containerPort: 80
           name: contacts-api
