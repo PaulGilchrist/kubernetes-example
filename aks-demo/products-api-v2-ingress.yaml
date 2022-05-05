@@ -4,13 +4,13 @@ metadata:
   name: products-api-v2-ingress
   namespace: demo
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/cors-allow-methods: "DELETE, GET, OPTIONS, PATCH, POST, PUT"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/limit-rps: "1" #Deliberatly limited so can demo HTTP 503 response
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
+  ingressClassName: nginx
   rules:
     - host: api.company.com
       http:

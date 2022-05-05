@@ -8,7 +8,7 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: contacts-api # has to match .spec.template.metadata.labels
+      app: contacts-api # has to match .spec.template.metadata.labels to select the pods that are part of this deployment
   minReadySeconds: 5 # how long after a new pod is ready before removing an old pod
   strategy:
     type: RollingUpdate
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        app: contacts-api # has to match .spec.selector.matchLabels
+        app: contacts-api # has to match .spec.selector.matchLabels so this pod template will be selected
       annotations:
         # dapr.io/enabled: "true"
         # dapr.io/app-id: "contacts-api"
@@ -58,9 +58,9 @@ spec:
             port: 80
           failureThreshold: 5
           initialDelaySeconds: 10
-          periodSeconds: 60
+          periodSeconds: 15
           successThreshold: 1
-          timeoutSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /health/liveness
@@ -75,8 +75,8 @@ spec:
           name: contacts-api
         resources:
           limits:
-            cpu: 500m
+            cpu: 80m
             memory: 1.5Gi
           requests:
-            cpu: 250m
+            cpu: 10m
             memory: 0.5Gi

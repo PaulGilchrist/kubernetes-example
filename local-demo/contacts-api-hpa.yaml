@@ -44,4 +44,3 @@ spec:
         value: 1 # default = 4
         periodSeconds: 15
       selectPolicy: Max
-
