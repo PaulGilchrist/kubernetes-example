@@ -53,7 +53,8 @@ kubectl exec busybox-secrets-store-inline-user-msi -- env
 # print a test secret 'ExampleSecret' held in secrets-store
 kubectl exec busybox-secrets-store-inline-user-msi -- cat /mnt/secrets-store/ExampleSecret
 ```
+## Notes
 
-As values change in Azure key Vault, the file content will change for the volumeMounts, but the environment variables are only set at pod startup.  If environment variables are not used in favor of directly accessing the volumeMounts, then the `env` section of the pod or deployment can be removed.  However, using environment variables is more intuitive and easier for the developer than having to code file access logic into the application.
+* As values change in Azure key Vault, the file content will change for the volumeMounts, but the environment variables are only set at pod startup.  If environment variables are not used in favor of directly accessing the volumeMounts, then the `env` section of the pod or deployment can be removed.  However, using environment variables is more intuitive and easier for the developer than having to code file access logic into the application.
 
-Step 1 is performed only once for the K8s cluster, but steps 2-7 can be repeated for different key vaults as needed
+* Step 1 is performed only once for the K8s cluster, but steps 2-7 can be repeated for different key vaults as needed
