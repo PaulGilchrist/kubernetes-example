@@ -19,7 +19,7 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: 80
   - type: Resource
     resource:
       name: memory
@@ -28,19 +28,15 @@ spec:
         averageValue: 1Gi
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: 30 # production should use default of 300
+      stabilizationWindowSeconds: 30 # default = 300 and should be set to 300 or more for production
       policies:
       - type: Pods # default = Percent
         value: 1 # default = 100
-        periodSeconds: 15
-      selectPolicy: Min
+        periodSeconds: 30 # default = 300 and should be set to 300 or more for production
     scaleUp:
-      stabilizationWindowSeconds: 15
+      stabilizationWindowSeconds: 30
       policies:
-      # - type: Percent
-      #   value: 100
-      #   periodSeconds: 15
-      - type: Pods
-        value: 1 # default = 4
+      - type: Pods # default = Percent
+        value: 1 # default = 100 allowing the number of pods to double each time
         periodSeconds: 15
-      selectPolicy: Max
+

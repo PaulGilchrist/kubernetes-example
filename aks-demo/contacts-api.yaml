@@ -56,8 +56,8 @@ spec:
           httpGet:
             path: /health/readiness
             port: 80
-          failureThreshold: 5
-          initialDelaySeconds: 10
+          failureThreshold: 3
+          initialDelaySeconds: 15
           periodSeconds: 15
           successThreshold: 1
           timeoutSeconds: 15
@@ -66,7 +66,7 @@ spec:
             path: /health/liveness
             port: 80
           failureThreshold: 3
-          initialDelaySeconds: 10
+          initialDelaySeconds: 15
           periodSeconds: 15
           successThreshold: 1
           timeoutSeconds: 5
@@ -75,8 +75,8 @@ spec:
           name: contacts-api
         resources:
           limits:
-            cpu: 80m
+            cpu: 80m  # this demo size is too small for production
             memory: 1.5Gi
           requests:
-            cpu: 10m
+            cpu: 5m # this demo size is too small for production
             memory: 0.5Gi
