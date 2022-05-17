@@ -18,3 +18,9 @@ spec:
           objectType: secret              # object types: secret, key, or cert
           objectVersion: ""               # [OPTIONAL] object versions, default to latest if empty
     tenantId: 1a9277a3-ef66-41f6-96b5-c5390ee468a7 # The tenant ID of the key vault
+  secretObjects:                              # [OPTIONAL] SecretObjects defines the desired state of synced Kubernetes secret objects
+  - data:
+    - key: example-secret # data field to populate
+      objectName: ExampleSecret # name of the mounted content in Key Vault to sync; this could be the object name or the object alias
+    secretName: key-vault-secrets # name of the Kubernetes secret object
+    type: Opaque         

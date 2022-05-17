@@ -10,7 +10,13 @@ spec:
       command:
         - "/bin/sleep"
         - "10000"
-      volumeMounts:
+      env:
+      - name: EXAMPLE_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: key-vault-secrets
+            key: example-secret
+      volumeMounts: # each secret will be its own file at this location
       - name: secrets-store01-inline
         mountPath: "/mnt/secrets-store"
         readOnly: true
