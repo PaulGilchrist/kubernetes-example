@@ -5,7 +5,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: dapr-pubsub-servicebus
+  name: dapr-pubsub-contacts
   namespace: demo
 spec:
   type: pubsub.azure.servicebus

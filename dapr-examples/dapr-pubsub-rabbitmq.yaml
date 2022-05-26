@@ -1,53 +1,45 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: dapr-pubsub-rabbitmq
+  name: dapr-pubsub-contacts
   namespace: demo
 spec:
   type: pubsub.rabbitmq
   version: v1
   metadata:
   - name: host
-    value: "amqp://queue:5672" # Kubernetes service name
+    value: "amqp://queue:5672" # K8s server name
+  - name: consumerID
+    value: myapp
   - name: durable
-    value: "false"
+    value: false
   - name: deletedWhenUnused
-    value: "false"
+    value: false
   - name: autoAck
-    value: "false"
+    value: false
   - name: deliveryMode
-    value: "0"
+    value: 0
   - name: requeueInFailure
-    value: "false"
+    value: false
   - name: prefetchCount
-    value: "0"
+    value: 0
   - name: reconnectWait
-    value: "1"
+    value: 0
   - name: concurrencyMode
     value: parallel
   - name: backOffPolicy
-    value: "exponential"
-  - name: backOffDuration
-    value: "5000"
+    value: exponential
   - name: backOffInitialInterval
-    value: "1000"
-  - name: backOffMaxInterval
-    value: "60000"
+    value: 100
   - name: backOffMaxRetries
-    value: "5"
-  - name: backOffRandomizationFactor
-    value: "0.5"
-  - name: backOffMultiplier
-    value: "2"
-  - name: backOffMaxElapsedTime
-    value: "15m"
-  - name: enableDeadLetter
-    value: "false"
-  - name: maxLen
-    value: "1000"
-  - name: maxLenBytes
-    value: "1048576"
+    value: 16
+  - name: enableDeadLetter # Optional enable dead Letter or not
+    value: true
+  - name: maxLen # Optional max message count in a queue
+    value: 3000
+  - name: maxLenBytes # Optional maximum length in bytes of a queue.
+    value: 10485760
   - name: exchangeKind
-    value: "topic"
+    value: fanout
 scopes:
   - contacts-api

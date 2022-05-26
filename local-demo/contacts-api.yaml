@@ -20,9 +20,9 @@ spec:
       labels:
         app: contacts-api # has to match .spec.selector.matchLabels so this pod template will be selected
       annotations:
-        # dapr.io/enabled: "true"
-        # dapr.io/app-id: "contacts-api"
-        # dapr.io/app-port: "80"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "contacts-api"
+        dapr.io/app-port: "80"
     spec:
       terminationGracePeriodSeconds: 30
       containers:
@@ -45,7 +45,7 @@ spec:
         - name: QueueName
           value: contacts
         - name: QueueType # valid options are "AzureServiceBus", "Dapr", or "RabbitMQ"
-          value: RabbitMQ
+          value: Dapr
         - name: TelemetryConnectionString # blank if TelemetryType="Console"
           value: 
         - name: TelemetryType # valid options are "AppInsights", "Console", or "Zipkin"
@@ -75,7 +75,7 @@ spec:
           name: contacts-api
         resources:
           limits:
-            cpu: 80m
+            cpu: 500m
             memory: 1.5Gi
           requests:
             cpu: 5m

@@ -85,7 +85,7 @@ This demo uses RabbitMQ for messaging, MongoDB for state, and native Kubernetes 
 
 1) [Install HomeBrew](https://mac.install.guide/homebrew/index.html) (if not already installed)
 
-2) Use Homebrew to [install Helm](https://helm.sh/docs/intro/install/) 
+2) Use Homebrew to [install Helm](https://helm.sh/docs/intro/install/) (if not already installed)
 
 3) Use Homebrew to [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/)
 
@@ -98,17 +98,13 @@ arch -arm64 brew install dapr/tap/dapr-cli
 ```
 dapr init --kubernetes --wait
 dapr status -k
-
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm repo update
-helm install redis bitnami/redis
-
-kubectl apply -f dapr-examples/redis-state.yaml
-kubectl apply -f dapr-examples/redis-pubsub.yaml
-kubectl apply -f dapr-examples/redis.yaml
 ```
 
-5) Optional - You can expose the Dapr dashboard to the URL http://localhost:9999 using the following command
+5) Add RabbitMQ exchange named "contacts" of type `fanout` and bind it to a new queue also named "contacts"
+
+6) Edit `contacts-api.yaml` environment variable "QueueType" from "RabbitMQ" to "Dapr" and re-apply this yaml file, and make sure the dapr annotations are not commented out
+
+7) Optional - You can expose the Dapr dashboard to the URL http://localhost:9999 using the following command
 
 ```
 dapr dashboard -k -p 9999

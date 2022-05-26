@@ -32,12 +32,12 @@ spec:
       policies:
       - type: Pods # default = Percent
         value: 1 # default = 100
-        periodSeconds: 30 # default = 300 and should be set to 300 or more for production
+        periodSeconds: 300 # default = 300 and should be set to 300 or more for production
     scaleUp:
       stabilizationWindowSeconds: 30
       policies:
       - type: Pods # default = Percent
         value: 1 # default = 100 allowing the number of pods to double each time
-        periodSeconds: 15
+        periodSeconds: 60
 
 

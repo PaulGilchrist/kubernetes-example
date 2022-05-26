@@ -4,13 +4,13 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: dapr-pubsub-contacts
-  namespace: demo
+  namespace: default
 spec:
   type: pubsub.rabbitmq
   version: v1
   metadata:
   - name: host
-    value: "amqp://queue-service:5672" # K8s server name
+    value: "amqp://queue-service:5672"
   - name: consumerID
     value: myapp
   - name: durable
@@ -43,5 +43,3 @@ spec:
     value: 10485760
   - name: exchangeKind
     value: fanout
-scopes:
-  - contacts-api

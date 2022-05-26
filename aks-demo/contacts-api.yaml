@@ -20,9 +20,9 @@ spec:
       labels:
         app: contacts-api # has to match .spec.selector.matchLabels so this pod template will be selected
       annotations:
-        # dapr.io/enabled: "true"
-        # dapr.io/app-id: "contacts-api"
-        # dapr.io/app-port: "80"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "contacts-api"
+        dapr.io/app-port: "80"
     spec:
       terminationGracePeriodSeconds: 30
       containers:

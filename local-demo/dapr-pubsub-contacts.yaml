@@ -1,47 +1,45 @@
-# Demo uses RabbitMQ, but this files shows how to use Azure Service Bus instead
-# https://docs.dapr.io/reference/components-reference/supported-pubsub/setup-azure-servicebus/
-# https://docs.dapr.io/developing-applications/building-blocks/pubsub/howto-publish-subscribe/#step-1-setup-the-pubsub-component
-
+# Add RabbitMQ exchange named "contacts" of type `fanout` and bind it to queue "contacts"
+# Make sure the contacts-api.yaml dapr annotations are not commented out and the environment variable QueueType is set to Dapr
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: dapr-pubsub-contacts
   namespace: demo
 spec:
-  type: pubsub.azure.servicebus
+  type: pubsub.rabbitmq
   version: v1
   metadata:
-  - name: connectionString # Required when not using Azure Authentication.
-    value: "<connection string goes here>"
-  - name: timeoutInSec # Optional
-    value: 60
-  - name: handlerTimeoutInSec # Optional
-    value: 60
-  - name: disableEntityManagement # Optional
-    value: "false"
-  - name: maxDeliveryCount # Optional
-    value: 3
-  - name: lockDurationInSec # Optional
-    value: 60
-  - name: lockRenewalInSec # Optional
-    value: 20
-  - name: maxActiveMessages # Optional
-    value: 2000
-  - name: maxActiveMessagesRecoveryInSec # Optional
-    value: 2
-  - name: maxConcurrentHandlers # Optional
-    value: 10
-  - name: prefetchCount # Optional
-    value: 5
-  - name: defaultMessageTimeToLiveInSec # Optional
-    value: 10
-  - name: autoDeleteOnIdleInSec # Optional
-    value: 3600
-  - name: maxReconnectionAttempts # Optional
-    value: 30
-  - name: connectionRecoveryInSec # Optional
-    value: 2
-  - name: publishMaxRetries # Optional
-    value: 5
-  - name: publishInitialRetryInternalInMs # Optional
-    value: 500
+  - name: host
+    value: "amqp://queue-service:5672"
+  - name: consumerID
+    value: myapp
+  - name: durable
+    value: false
+  - name: deletedWhenUnused
+    value: false
+  - name: autoAck
+    value: false
+  - name: deliveryMode
+    value: 0
+  - name: requeueInFailure
+    value: false
+  - name: prefetchCount
+    value: 0
+  - name: reconnectWait
+    value: 0
+  - name: concurrencyMode
+    value: parallel
+  - name: backOffPolicy
+    value: exponential
+  - name: backOffInitialInterval
+    value: 100
+  - name: backOffMaxRetries
+    value: 16
+  - name: enableDeadLetter # Optional enable dead Letter or not
+    value: true
+  - name: maxLen # Optional max message count in a queue
+    value: 3000
+  - name: maxLenBytes # Optional maximum length in bytes of a queue.
+    value: 10485760
+  - name: exchangeKind
+    value: fanout
