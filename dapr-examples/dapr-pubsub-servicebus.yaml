@@ -5,7 +5,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: dapr-pubsub-contacts
+  name: contacts-pubsub
   namespace: demo
 spec:
   type: pubsub.azure.servicebus
@@ -45,3 +45,5 @@ spec:
   #   value: 5
   # - name: publishInitialRetryInternalInMs # Optional
   #   value: 500
+scopes:
+  - contacts-api

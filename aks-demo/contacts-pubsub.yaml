@@ -1,9 +1,10 @@
-# Add RabbitMQ exchange named "contacts" of type `fanout` and bind it to queue "contacts"
 # Make sure the contacts-api.yaml dapr annotations are not commented out and the environment variable QueueType is set to Dapr
+# Add RabbitMQ exchange named matching the QueueName from contacts-api.yaml
+# If you want to see the messages come in, bind at least 1 queue to the newly created exchange
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: dapr-pubsub-contacts
+  name: contacts-pubsub
   namespace: demo
 spec:
   type: pubsub.rabbitmq
