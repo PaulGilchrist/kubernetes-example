@@ -4,14 +4,16 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: contacts-api # match service name
+  name: contacts-api-pubsub # Path becomes http://localhost:3500/publish/contacts-api-pubsub
   namespace: demo
+scopes:
+  - contacts-api
 spec:
   type: pubsub.rabbitmq
   version: v1
   metadata:
   - name: host
-    value: "amqp://queue-service:5672"
+    value: "amqp://queue-service:5672" # K8s server name
   - name: consumerID
     value: myapp
   - name: durable
@@ -44,5 +46,3 @@ spec:
     value: 10485760
   - name: exchangeKind
     value: fanout
-scopes:
-  - contacts-api
