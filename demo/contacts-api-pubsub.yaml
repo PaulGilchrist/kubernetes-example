@@ -13,7 +13,7 @@ spec:
   version: v1
   metadata:
   - name: host
-    value: "amqp://queue-service:5672" # K8s server name
+    value: "amqp://queue-service:5672" # K8s service name
   - name: consumerID
     value: myapp
   - name: durable

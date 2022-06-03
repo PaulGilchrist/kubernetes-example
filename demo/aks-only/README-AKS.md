@@ -103,3 +103,7 @@ spec:
 ```
 
 * Azure installs a metrics-server when AKS is built where local Kubernetes requires manual installation
+
+## Azure Key Vault
+
+If wanting to use Azure Key Vault for secrets, refer to the README file in the `aks-keyvault` folder

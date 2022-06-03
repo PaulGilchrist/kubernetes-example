@@ -55,10 +55,22 @@ kubectl top node
 8) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local.
 
 ```
-kubectl apply -f local-demo
+kubectl apply -f demo
 ```
 
-9) Connect to the database container's console and setup and admin account
+9) If using a local Kubernetes cluster apply the local specific files
+
+```
+kubectl apply -f demo/local-only
+```
+
+10) If using an Azure Kubernetes cluster apply the AKS specific files
+
+```
+kubectl apply -f demo/aks-only
+```
+
+11) Connect to the database container's console and setup and admin account
 ```
 kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
 
@@ -147,7 +159,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/a
 
 2) Create dashboard admin user
 ```
-kubectl apply -f dashboard-adminuser.yaml
+kubectl apply -f examples/dashboard-adminuser.yaml
 ```
 3) Get bearer token of dashboard admin user
 ```
