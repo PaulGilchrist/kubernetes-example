@@ -4,7 +4,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: contacts-pubsub
+  name: contacts-api # match service name
   namespace: demo
 spec:
   type: pubsub.rabbitmq

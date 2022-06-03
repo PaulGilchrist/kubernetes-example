@@ -42,10 +42,8 @@ spec:
           value: mongotest
         - name: QueueConnectionString # same as HostName for QueueType="RabbitMQ"
           value: queue-service
-        - name: QueueName
-          value: contacts
         - name: QueueType # valid options are "AzureServiceBus", "Dapr", or "RabbitMQ"
-          value: RabbitMQ
+          value: Dapr
         - name: TelemetryConnectionString # blank if TelemetryType="Console"
           value: 
         - name: TelemetryType # valid options are "AppInsights", "Console", or "Zipkin"
