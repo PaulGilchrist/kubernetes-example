@@ -145,6 +145,18 @@ node receive-api.js
 
 # Appendix
 
+## Lens Dashboard
+
+The Lens Kubernetes IDE can be installed here: [Lens Dekstop](https://k8slens.dev), and you can read more about it here: [Overview](https://docs.k8slens.dev/main/)
+
+If using Lens you can optionally go to `Settings/Lens Metrics` for any managed cluster and enable Prometheus.  Once doing this, you will begin seeing CPU, memory and capacity metrics displayed directly within Lens.  If wanting to also directly access the Prometheus dashboard, you can port forward it to localhost as follows:
+
+```bash
+kubectl port-forward --namespace lens-metrics prometheus-0 9090
+```
+
+The Prometheus desktop could then be accessed at http://localhost:9090
+
 ## Kubernetes Dashboard
 
 Although you can use these steps to install the Kubernetes dashboard, it is recommended to use [Lens Dekstop](https://k8slens.dev) instead.
