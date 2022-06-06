@@ -70,7 +70,7 @@ kubectl apply -f demo/local-only
 kubectl apply -f demo/aks-only
 ```
 
-11) Connect to the database container's console and setup and admin account
+11) Connect to the database container's console and setup an admin account
 ```
 kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
 
@@ -90,6 +90,29 @@ db.createUser({
 exit
 exit
 ```
+
+## Testing
+
+There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully.  You should wait for this job to complete before proceeding to the remaining steps.
+
+`Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"`
+
+1) You can now connect to the database using any client like [MongoDB Compass](https://www.mongodb.com/products/compass) and the connection string of [mongodb://database.local.com:27017]()
+
+2) You can connect to the message queue admin console using the URL http://queue.local.com:15672, the username of `guest` and the password of `guest`
+
+3) You can connect to the APIs using the URL https://api.local.com/.
+   * This URL will connect to both the contacts and products OpenAPI (swagger) specifications, and allow testing either backend API service.
+
+4) You can connect to the application using the URL https://app.local.com/.
+
+5) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
+
+```
+node receive-api.js
+```
+
+# Appendix
 
 ## Dapr Setup (optional)
 
@@ -122,30 +145,7 @@ dapr status -k
 dapr dashboard -k -p 9999
 ```
 
-## Testing
-
-There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully.  You should wait for this job to complete before proceeding to the remaining steps.
-
-`Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"`
-
-1) You can now connect to the database using any client like [MongoDB Compass](https://www.mongodb.com/products/compass) and the connection string of [mongodb://database.local.com:27017]()
-
-2) You can connect to the message queue admin console using the URL http://queue.local.com:15672, the username of `guest` and the password of `guest`
-
-3) You can connect to the APIs using the URL https://api.local.com/.
-   * This URL will connect to both the contacts and products OpenAPI (swagger) specifications, and allow testing either backend API service.
-
-4) You can connect to the application using the URL https://app.local.com/.
-
-5) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
-
-```
-node receive-api.js
-```
-
-# Appendix
-
-## Lens Dashboard
+## Lens Dashboard (optional)
 
 The Lens Kubernetes IDE can be installed here: [Lens Dekstop](https://k8slens.dev), and you can read more about it here: [Overview](https://docs.k8slens.dev/main/)
 
@@ -157,7 +157,7 @@ kubectl port-forward --namespace lens-metrics prometheus-0 9090
 
 The Prometheus desktop could then be accessed at http://localhost:9090
 
-## Kubernetes Dashboard
+## Kubernetes Dashboard (optional - Lens Recommended instead)
 
 Although you can use these steps to install the Kubernetes dashboard, it is recommended to use [Lens Dekstop](https://k8slens.dev) instead.
 
@@ -185,18 +185,6 @@ kubectl proxy
 5) Browse to dashboard and enter token
 ```
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
-```
-
-## Complete Removal
-```
-kubectl delete -f local-demo
-```
-
-## Container Update Example (or job re-run)
-
-```
-kubectl delete job test-data-management
-kubectl apply -f local-demo
 ```
 
 ## Removing an Old Cluster From Config
