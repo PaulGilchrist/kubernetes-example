@@ -1,0 +1,10 @@
+apiVersion: v2
+name: test-data-management
+description: Test Data management used in Kubernetes/Helm demo
+keywords:
+  - demo
+  - test data management
+type: application
+appVersion: 1.0.0
+version: 0.1.0
+dependencies:

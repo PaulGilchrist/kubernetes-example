@@ -1,6 +1,6 @@
 apiVersion: v2
-name: my-application
-description: Demo of multi-tiered application
+name: demo-app
+description: Demo of multi-tiered application using Kubernetes/Helm
 keywords:
   - demo
 type: application

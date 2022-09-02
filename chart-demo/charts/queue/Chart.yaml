@@ -1,6 +1,6 @@
 apiVersion: v2
 name: queue
-description: RabbitMQ event message broker used in Kubernetes/Heml demo
+description: RabbitMQ event message broker used in Kubernetes/Helm demo
 keywords:
   - demo
   - broker

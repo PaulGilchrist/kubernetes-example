@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-data-management
+spec:
+  template:
+    spec:
+      containers:
+        - name: test-data-management
+          env: 
+          - name: mongoDbConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: test-data-management-secrets
+                key: mongoDbConnectionString
+                optional: false
+          image: paulgilchrist/mongodb-insert:{{.Values.image.tag}}
+          imagePullPolicy: Always
+      restartPolicy: Never
+  backoffLimit: 0

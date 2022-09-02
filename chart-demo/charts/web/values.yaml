@@ -1,0 +1,4 @@
+api_url: https://api.local.com
+hostname: app.local.com
+image:
+  tag: latest

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-api-v1
+spec:
+  #replicas: 1 # remove this if using horizontal auto-scaling
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: products-api-v1 # has to match .spec.template.metadata.labels
+  minReadySeconds: 5 # how long after a new pod is ready before removing an old pod
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: products-api-v1 # has to match .spec.selector.matchLabels
+      annotations:
+        # dapr.io/enabled: "true"
+        # dapr.io/app-id: "products-api-v1"
+        # dapr.io/app-port: "80"
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: products-api-v1
+        env: 
+        - name: BasePath
+          value: /products/v1
+        image: paulgilchrist/minimal-api:1.1.0
+        imagePullPolicy: Always
+        readinessProbe: # More heavyweight check than liveness with more details returned
+          tcpSocket: # Always prefer to use httpGet if supported by container
+            port: 80
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 30 
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 80
+          name: products-api-v1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1.5Gi
+          requests:
+            cpu: 250m
+            memory: 0.5Gi

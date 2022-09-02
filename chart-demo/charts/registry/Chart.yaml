@@ -1,9 +1,9 @@
 apiVersion: v2
-name: database
-description: MongoDB database used in Kubernetes/Helm demo
+name: registry
+description: OpenAPI Service Registry used in Kubernetes/Helm demo
 keywords:
   - demo
-  - database
+  - registry
 type: application
 appVersion: 1.0.0
 version: 0.1.0

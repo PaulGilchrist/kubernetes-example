@@ -1,7 +1,27 @@
-# # override database chart defaults here
+contacts-api:
+  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
+  hostname: api.local.com
+  image:
+    tag: latest
 database:
-  imagetag: latest
+  image:
+    tag: latest
   path: /Users/Shared/containerStorage/mongodb
-# # override database chart defaults here
+products-api:
+  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
+  hostname: api.local.com
 queue:
-  nodename: rabbit@localhost 
+  nodename: rabbit@localhost
+registry:
+  hostname: api.local.com
+  image:
+    tag: latest
+test-data-management:
+  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
+  image:
+    tag: latest
+web:
+  api_url: https://api.local.com
+  hostname: app.local.com
+  image:
+    tag: latest
