@@ -1,0 +1,7 @@
+# # override database chart defaults here
+database:
+  imagetag: latest
+  path: /Users/Shared/containerStorage/mongodb
+# # override database chart defaults here
+queue:
+  nodename: rabbit@localhost 

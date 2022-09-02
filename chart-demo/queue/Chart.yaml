@@ -1,0 +1,11 @@
+apiVersion: v2
+name: queue
+description: RabbitMQ event message broker used in Kubernetes/Heml demo
+keywords:
+  - demo
+  - broker
+  - events
+type: application
+appVersion: 1.0.0
+version: 0.1.0
+dependencies:

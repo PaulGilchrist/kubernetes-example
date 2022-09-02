@@ -1,0 +1,9 @@
+apiVersion: v2
+name: my-application
+description: Demo of multi-tiered application
+keywords:
+  - demo
+type: application
+appVersion: 1.0.0
+version: 0.1.0
+dependencies:

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: database
+description: MongoDB database used in Kubernetes/Heml demo
+keywords:
+  - demo
+  - database
+type: application
+appVersion: 1.0.0
+version: 0.1.0
+dependencies:
