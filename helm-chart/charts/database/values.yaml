@@ -1,2 +1,4 @@
-imagetag: latest
-path: /Users/Shared/containerStorage/mongodb
+global:
+  env: local
+image:
+  tag: latest

@@ -24,7 +24,7 @@ spec:
       - name: web
         env: 
         - name: API_URL
-          value: {{.Values.api_url}}/contacts
+          value: https://{{.Values.global.api_hostname}}/contacts
         image: paulgilchrist/mongodb-web:{{.Values.image.tag}}
         imagePullPolicy: Always
         readinessProbe: # More heavyweight check than liveness with more details returned

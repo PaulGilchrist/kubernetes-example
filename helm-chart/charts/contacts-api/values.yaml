@@ -1,4 +1,5 @@
-database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
-hostname: api.local.com
+global:
+  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
+  api_hostname: api.local.com
 image:
   tag: latest

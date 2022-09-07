@@ -1,27 +1,22 @@
+global:
+  env: local
+  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc= # or bW9uZ29kYjovL2FkbWluOm1vbmdvZGItazhzLWRlbW9AZGF0YWJhc2Utc2VydmljZToyNzAxNw==
+  api_hostname: api.local.com
+  app_hostname: app.local.com
 contacts-api:
-  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
-  hostname: api.local.com
   image:
     tag: latest
 database:
   image:
     tag: latest
-  path: /Users/Shared/containerStorage/mongodb
-products-api:
-  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
-  hostname: api.local.com
 queue:
   nodename: rabbit@localhost
 registry:
-  hostname: api.local.com
   image:
     tag: latest
 test-data-management:
-  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
   image:
     tag: latest
 web:
-  api_url: https://api.local.com
-  hostname: app.local.com
   image:
     tag: latest

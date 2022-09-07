@@ -33,9 +33,9 @@ Example values:
 
 3) Open Keychain Access and trust the new certificate (local.com for local-demo, and company.com for aks-demo)
 
-4) Add the certificate to a K8s secret (choose based on current kubernetes context)
+4) Add one of the following certificates to an K8s secret (choose based on current kubernetes context)
 
 ```
-kubectl create secret tls local-cert --key local.com.key --cert local.com.crt
-kubectl create secret tls company-cert --key company.com.key --cert company.com.crt
+kubectl create secret tls domain-cert --key local.com.key --cert local.com.crt
+kubectl create secret tls domain-cert --key company.com.key --cert company.com.crt
 ```

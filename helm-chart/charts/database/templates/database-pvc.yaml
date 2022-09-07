@@ -1,13 +1,40 @@
+{{- if eq .Values.global.env "local" }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: database-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: database-sc
+  local:
+    path: /Users/Shared/containerStorage/mongodb
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - docker-desktop
+---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: database-pvc
 spec:
-  storageClassName: local-sc
+  storageClassName: database-sc
   accessModes:
     - ReadWriteOnce
-  volumeMode: Filesystem
-  volumeName: database-pv
   resources:
     requests:
       storage: 1Gi
+{{- if eq .Values.global.env "local" }}
+  volumeMode: Filesystem
+  volumeName: database-pv
+{{- end }}

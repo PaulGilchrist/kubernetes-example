@@ -1,3 +1,4 @@
-hostname: api.local.com
+global:
+  api_hostname: api.local.com
 image:
   tag: latest
