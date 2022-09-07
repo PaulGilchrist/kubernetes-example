@@ -1,8 +1,8 @@
 global:
   env: local
-  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc= # or bW9uZ29kYjovL2FkbWluOm1vbmdvZGItazhzLWRlbW9AZGF0YWJhc2Utc2VydmljZToyNzAxNw==
-  api_hostname: api.local.com
-  app_hostname: app.local.com
+  database_connection_string: bW9uZ29kYjovL2FkbWluOm1vbmdvZGItazhzLWRlbW9AZGF0YWJhc2Utc2VydmljZToyNzAxNw==
+  domain: local.com
+  loadBalancerIP: 20.47.116.6 # Must be standard if AKS LoadBalancer is standard, basic if AKS LoadBalancer is basic
 contacts-api:
   image:
     tag: latest

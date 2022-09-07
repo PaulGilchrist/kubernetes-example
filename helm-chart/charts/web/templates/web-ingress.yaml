@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: {{.Values.global.app_hostname}}
+  - host: app.{{.Values.global.domain}}
     http:
       paths:
       - path: /
@@ -24,5 +24,5 @@ spec:
   # This section is only required if TLS is to be enabled for the Ingress
   tls:
     - hosts:
-      - {{.Values.global.app_hostname}}
+      - app.{{.Values.global.domain}}
       secretName: domain-cert

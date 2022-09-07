@@ -9,7 +9,7 @@ metadata:
 spec:
 {{- if ne .Values.global.env "local" }}
   externalTrafficPolicy: Cluster
-  loadBalancerIP: 20.47.116.6 # Must be standard if AKS LoadBalancer is standard, basic if AKS LoadBalancer is basic
+  loadBalancerIP: {{ .Values.global.loadBalancerIP }}
 {{- end }}
   ports:
     - port: 27017

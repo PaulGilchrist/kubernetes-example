@@ -24,7 +24,7 @@ spec:
       - name: registry
         env: 
         - name: API_URL
-          value: https://{{.Values.global.api_hostname}}
+          value: https://api.{{.Values.global.domain}}
         image: paulgilchrist/swagger-ui:{{.Values.image.tag}}
         imagePullPolicy: Always
         readinessProbe: # More heavyweight check than liveness with more details returned

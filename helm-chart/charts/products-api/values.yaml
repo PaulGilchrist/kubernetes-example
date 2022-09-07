@@ -1,4 +1,4 @@
 global:
   env: local
   database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
-  api_hostname: api.local.com
+  domain: local.com

@@ -1,4 +1,5 @@
 global:
-  api_hostname: api.local.com
+  env: local
+  domain: local.com
 image:
   tag: latest

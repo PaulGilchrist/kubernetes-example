@@ -1,4 +1,6 @@
 global:
   env: local
+  domain: local.com
+  loadBalancerIP: 20.47.116.6 # Must be standard if AKS LoadBalancer is standard, basic if AKS LoadBalancer is basic
 image:
   tag: latest

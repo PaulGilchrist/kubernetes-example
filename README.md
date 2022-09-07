@@ -51,30 +51,22 @@ kubectl top pod -A
 kubectl top node
 ```
 
-
-8) Apply the templates needed to setup the pod.  It may take a minute or two to complete the build if the container images are not already local.
-
-```
-kubectl apply -f demo
-```
-
-9) If using a local Kubernetes cluster apply the local specific files
+8) Test a dry run of the templates against your cluster.  If wanting to deploy to Azure Kubernetes Servies (AKS) you can change global.env to be `dev` instead of `local`.
 
 ```
-kubectl apply -f demo/local-only
+helm install demo helm-chart -n demo --set global.env=local,global.domain=local.com --dry-run --debug
+
+helm install demo helm-chart -n demo --set global.env=dev,global.domain=company.com --dry-run --debug
 ```
 
-10) If using an Azure Kubernetes cluster apply the AKS specific files
+9) Apply the templates needed to setup the pod by re-running the above command with `--dry-run --debug` removed.
 
-```
-kubectl apply -f demo/aks-only
-```
+10) Connect to the database container's console and setup an admin account
 
-11) Connect to the database container's console and setup an admin account
 ```
 kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
 
-mongo
+mongosh
 use admin
 db.createUser({
     user: "admin",
@@ -97,7 +89,7 @@ There is a job that runs to populate the database, the container will remain for
 
 `Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"`
 
-1) You can now connect to the database using any client like [MongoDB Compass](https://www.mongodb.com/products/compass) and the connection string of [mongodb://database.local.com:27017]()
+1) You can now connect to the database using any client like [MongoDB Compass](https://www.mongodb.com/products/compass) and the connection string of [mongodb://admin:mongodb-k8s-demo@database.local.com:27017]()
 
 2) You can connect to the message queue admin console using the URL http://queue.local.com:15672, the username of `guest` and the password of `guest`
 
