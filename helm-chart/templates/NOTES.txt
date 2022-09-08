@@ -1,0 +1,21 @@
+Chart name       = {{ .Chart.Name }}.
+Release name     = {{ .Release.Name }}.
+Environment      = {{.Values.global.env}}
+App Url          = https://app.{{.Values.global.domain}}
+API Url          = https://api.{{.Values.global.domain}}
+Queue Url        = http://{{.Values.queue.loadBalancerIP}}:15672
+Database Console = kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
+Database Url     = kubectl port-forward -n demo pod/database-0 27017:27017
+                   mongodb://localhost:27017
+
+Deploying the following container image versions:
+    contacts-api         = paulgilchrist/mongodb-api:{{.Values.contacts_api.image.tag}}
+    database             = mongo:{{.Values.database.image.tag}}
+    products-api         = paulgilchrist/minimal-api:1.1.0
+                           paulgilchrist/minimal-api:1.2.0 
+    queue                = rabbitmq:3-management
+    registry             = paulgilchrist/swagger-ui:{{.Values.registry.image.tag}}
+    test-data-management = paulgilchrist/mongodb-insert:{{.Values.test_data_management.image.tag}}
+    web                  = paulgilchrist/mongodb-web:{{.Values.web.image.tag}}
+
+It may take a few minutes for the database to startup, and its data to be synthesized.  You can watch the status by running ‘kubectl get pods -n demo’ and waiting for the ‘test-data-management’ pod to have completed

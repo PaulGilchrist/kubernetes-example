@@ -2,7 +2,7 @@ global:
   env: local
   database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
   domain: local.com
-contacts-api:
+contacts_api:
   image:
     tag: latest
 database:
@@ -14,7 +14,7 @@ queue:
 registry:
   image:
     tag: latest
-test-data-management:
+test_data_management:
   image:
     tag: latest
 web:
