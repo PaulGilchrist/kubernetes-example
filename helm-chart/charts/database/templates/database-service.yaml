@@ -7,13 +7,9 @@ metadata:
     service.beta.kubernetes.io/azure-load-balancer-resource-group: mc_aks_testing_westus 
 {{- end }}
 spec:
-{{- if ne .Values.global.env "local" }}
-  # externalTrafficPolicy: Cluster # for use only with type: LoadBalancer
-  loadBalancerIP: {{ .Values.global.loadBalancerIP }}
-{{- end }}
   ports:
     - port: 27017
       name: database
   selector:
     app: database
-  type: ClusterIP # Choose `LoadBalancer` if you want to expose outside cluster, but make sure to setup MongoDB auth first
+  type: ClusterIP

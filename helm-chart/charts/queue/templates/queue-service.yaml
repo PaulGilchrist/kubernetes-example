@@ -9,7 +9,7 @@ metadata:
 spec:
 {{- if ne .Values.global.env "local" }}
   externalTrafficPolicy: Cluster
-  loadBalancerIP:  {{ .Values.global.loadBalancerIP }}
+  loadBalancerIP:  {{ .Values.loadBalancerIP }}
 {{- end }}
   ports:
     - port: 15672

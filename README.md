@@ -15,14 +15,16 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
 1) Create a folder named `mongodb` located at `/Users/Shared/containerStorage`.  This folder can be moved to any other root folder, as long as the file named `helm-chart/charts/database/templates/database-pvc.yaml` has its `spec.local.path` changed accordingly.
 
 2) Add the following lines to your local `/private/etc/hosts`
-   * This will allow the ingress controller to route 80/443 traffic to specific DNS names and URL paths to specific services and enforce TLS encryption, while also allowing the queue and database to route using their specific ports
+   * This will allow the ingress controller to route 80/443 traffic to specific DNS names and URL paths to specific services and enforce TLS encryption, while also allowing the queue to route using its specific ports
 
 ```
 127.0.0.1	app.local.com
 127.0.0.1	api.local.com
 127.0.0.1	queue.local.com
-127.0.0.1	database.local.com
 ```
+
+   * If you will be installing to Azure Kubernetes Services (AKS) rather than locally, change the IP addresses above to match the AKS ingress gateway for `app`, `api`, and match a dedicated Azure Public IP you have added for the `queue`
+
 
 4) [Install Helm](https://helm.sh/docs/intro/install/) locally then use it to install an nginx Kubernetes ingress gateway. **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
 
@@ -50,12 +52,12 @@ kubectl top node
 kubectl create namespace demo
 ```
 
-8) Test a dry run of the templates against your cluster.  If wanting to deploy to Azure Kubernetes Servies (AKS) you can change global.env to be `dev` instead of `local`.
+8) Test a dry run of the templates against your cluster.  Choose one of the below commands with the first one being designed for a local MacOS install, and the second being designed for an Azure Kubernetes Services install.  If choosing to do the AKS install, first setup an Azure Public IP to be used by the queue service and update the below command with that IP.
 
 ```
 helm install demo helm-chart -n demo --set global.env=local,global.domain=local.com --dry-run --debug
 
-helm install demo helm-chart -n demo --set global.env=dev,global.domain=company.com --dry-run --debug
+helm install demo helm-chart -n demo --set global.env=dev,global.domain=company.com,queue.loadBalancerIP=20.47.116.6 --dry-run --debug
 ```
 
 9) Apply the templates needed to setup the pod by re-running the above command with `--dry-run --debug` removed.

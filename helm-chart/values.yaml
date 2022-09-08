@@ -1,8 +1,7 @@
 global:
   env: local
-  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc= #bW9uZ29kYjovL2FkbWluOm1vbmdvZGItazhzLWRlbW9AZGF0YWJhc2Utc2VydmljZToyNzAxNw==
+  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
   domain: local.com
-  loadBalancerIP: 20.47.116.6 # Must be standard if AKS LoadBalancer is standard, basic if AKS LoadBalancer is basic
 contacts-api:
   image:
     tag: latest
@@ -10,6 +9,7 @@ database:
   image:
     tag: latest
 queue:
+  loadBalancerIP: 20.47.116.6 # Must be standard if AKS LoadBalancer is standard, basic if AKS LoadBalancer is basic
   nodename: rabbit@localhost
 registry:
   image:
