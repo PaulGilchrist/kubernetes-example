@@ -47,20 +47,15 @@ kubectl top pod -A
 kubectl top node
 ```
 
-7) Create the namespace
-```
-kubectl create namespace demo
-```
-
-8) Test a dry run of the templates against your cluster.  Choose one of the below commands with the first one being designed for a local MacOS install, and the second being designed for an Azure Kubernetes Services install.  If choosing to do the AKS install, first setup an Azure Public IP to be used by the queue service and update the below command with that IP.
+7) Test a dry run of the templates against your cluster.  Choose one of the below commands with the first one being designed for a local MacOS install, and the second being designed for an Azure Kubernetes Services install.  If choosing to do the AKS install, first setup an Azure Public IP to be used by the queue service and update the below command with that IP.
 
 ```
-helm install demo helm-chart -n demo --set global.env=local,global.domain=local.com --dry-run --debug
+helm install demo helm-chart -n demo --create-namespace --set global.env=local,global.domain=local.com --dry-run --debug
 
-helm install demo helm-chart -n demo --set global.env=dev,global.domain=company.com,queue.loadBalancerIP=20.47.116.6 --dry-run --debug
+helm install demo helm-chart -n demo --create-namespace --set global.env=dev,global.domain=company.com,queue.loadBalancerIP=20.47.116.6 --dry-run --debug
 ```
 
-9) Apply the templates needed to setup the pod by re-running the above command with `--dry-run --debug` removed.
+8) Apply the templates needed to setup the pod by re-running the above command with `--dry-run --debug` removed.
 
 
 ## Testing
