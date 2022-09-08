@@ -26,7 +26,7 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
    * If you will be installing to Azure Kubernetes Services (AKS) rather than locally, change the IP addresses above to match the AKS ingress gateway for `app`, `api`, and match a dedicated Azure Public IP you have added for the `queue`
 
 
-4) [Install Helm](https://helm.sh/docs/intro/install/) locally then use it to install an nginx Kubernetes ingress gateway. **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
+4) [Install Helm](https://helm.sh/docs/intro/install/) locally then use it to install an `nginx Kubernetes ingress gateway`. **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
 
 ```
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
@@ -82,7 +82,7 @@ node receive-api.js
 This demo does not expose the database outside of the Kubernetes cluster, and as such, if wantitng to test it, you can either connect to its console:
 
 ```
-kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
+kubectl exec -n demo --stdin --tty database-0 -- /bin/bash
 ```
 
 or temporarily forward its database port to localhost
@@ -101,7 +101,7 @@ This demo does not secure the database beyond preventing external access.  Shoul
 1) Connect to the database container's console and setup an admin account
 
 ```
-kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
+kubectl exec -n demo --stdin --tty database-0 -- /bin/bash
 
 mongosh
 use admin
