@@ -35,6 +35,5 @@ spec:
     requests:
       storage: 1Gi
 {{- if eq .Values.global.env "local" }}
-  volumeMode: Filesystem
   volumeName: database-pv
 {{- end }}

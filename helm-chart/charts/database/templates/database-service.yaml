@@ -16,4 +16,4 @@ spec:
       name: database
   selector:
     app: database
-  type: LoadBalancer # so a listner can be outside the cluster without needing an ingress
+  type: ClusterIP # Choose `LoadBalancer` if you want to expose outside cluster, but make sure to setup MongoDB auth first

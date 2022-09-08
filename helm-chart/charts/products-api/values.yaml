@@ -1,4 +1,3 @@
 global:
   env: local
-  database_connection_string: bW9uZ29kYjovL2RhdGFiYXNlLXNlcnZpY2U6MjcwMTc=
   domain: local.com

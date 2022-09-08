@@ -1,19 +1,18 @@
 # kubernetes-example
 This project shows a multi-tiered application environment being built with a single Kubernetes command.  Kubernetes executes the following sequence of events:
 
-1) Builds a Mongo database server ([mongodb://localhost:27017/](mongodb://localhost:27017/))
+1) Builds a Mongo database server [mongodb://database.local.com:27017/]()
 2) Creates a new database (`mongotest`) and container (`contacts`), then populates it with synthetic data
-3) Creates an Event queue service (http://localhost:15672/)
-4) Builds two separate OData API (https://contacts.company.com & https://products.company.com) and connects one of them to both the new database, and new event queue service
-   * Make sure to add these to your local `hosts` file pointing them to `127.0.0.1`
-5) Builds a website (http://localhost:8080) and connects it to the new contacts OData API
-6) Builds a service registry (http://localhost:8081) and connects it to both new OData API 
+3) Creates an Event queue service (http://queue.local.com:15672/)
+4) Builds two separate OData API (https://contacts.local.com & https://products.local.com) and connects one of them to both the new database, and new event queue service
+5) Builds a website (http://app.local.com:8080) and connects it to the new contacts OData API
+6) Builds a service registry (http://api.local.com:8081) and connects it to both new OData API 
 
 All of these projects are available on [Github](https://github.com/PaulGilchrist?tab=repositories) and can change from `latest` to specific versions if desiring manual control over when an update occurs.
 
 ## Kubernetes Setup
 
-1) Create a folder named `mongodb` located at `/Users/Shared/containerStorage`.  This folder can be moved to any other root folder, as long as the file named `local-demo/database-pv.yaml` has its `spec.local.path` changed accordingly.
+1) Create a folder named `mongodb` located at `/Users/Shared/containerStorage`.  This folder can be moved to any other root folder, as long as the file named `helm-chart/charts/database/templates/database-pvc.yaml` has its `spec.local.path` changed accordingly.
 
 2) Add the following lines to your local `/private/etc/hosts`
    * This will allow the ingress controller to route 80/443 traffic to specific DNS names and URL paths to specific services and enforce TLS encryption, while also allowing the queue and database to route using their specific ports
@@ -22,7 +21,7 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
 127.0.0.1	app.local.com
 127.0.0.1	api.local.com
 127.0.0.1	queue.local.com
-127.0.0.1	dataabse.local.com
+127.0.0.1	database.local.com
 ```
 
 4) [Install Helm](https://helm.sh/docs/intro/install/) locally then use it to install an nginx Kubernetes ingress gateway. **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
@@ -33,12 +32,7 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 
 5) To support SSL/TLS for ingress, execute the steps in file `certificate-creation/README-cert-creation.md` to create a self-signed certificate or the steps in file `certificate-creation/README-pfx-to-crt.md` if you already have a public certificate.
 
-6) Create the namespace
-```
-kubectl create namespace demo
-```
-
-7) Install a [metrics server]([https://github.com/kubernetes-sigs/metrics-server#deployment) by first copying [YAML](https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml) followed by adding `--kubelet-insecure-tls` to the `args` section, changing `--metric-resolution=15s` from 15s to 90s, and then applying the file using `kubectl`.  This step is not required for Azure AKS, and only needed for local Kubernetes.  Try to keep the metric-resolution as low as possible, but if too low, the metrics-server will fail to start.
+6) Install a [metrics server]([https://github.com/kubernetes-sigs/metrics-server#deployment) by first copying [YAML](https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml) followed by adding `--kubelet-insecure-tls` to the `args` section, changing `--metric-resolution=15s` from 15s to 90s, and then applying the file using `kubectl`.  This step is not required for Azure AKS, and only needed for local Kubernetes.  Try to keep the metric-resolution as low as possible, but if too low, the metrics-server will fail to start.
 
 * Test readiness
 ```
@@ -51,6 +45,11 @@ kubectl top pod -A
 kubectl top node
 ```
 
+7) Create the namespace
+```
+kubectl create namespace demo
+```
+
 8) Test a dry run of the templates against your cluster.  If wanting to deploy to Azure Kubernetes Servies (AKS) you can change global.env to be `dev` instead of `local`.
 
 ```
@@ -61,7 +60,48 @@ helm install demo helm-chart -n demo --set global.env=dev,global.domain=company.
 
 9) Apply the templates needed to setup the pod by re-running the above command with `--dry-run --debug` removed.
 
-10) Connect to the database container's console and setup an admin account
+
+## Testing
+
+There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully.  You should wait for this job to complete before proceeding to the remaining steps.
+
+`Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"`
+
+1) You can connect to the message queue admin console using the URL http://queue.local.com:15672, the username of `guest` and the password of `guest`
+
+2) You can connect to the APIs using the URL https://api.local.com/.
+   * This URL will connect to both the contacts and products OpenAPI (swagger) specifications, and allow testing either backend API service.
+
+3) You can connect to the application using the URL https://app.local.com/.
+
+4) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
+
+```
+node receive-api.js
+```
+
+## Database Testing
+
+This demo does not expose the database outside of the Kubernetes cluster, and as such, if wantitng to test it, you can either connect to its console:
+
+```
+kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
+```
+
+or temporarily forward its database port to localhost
+
+```
+kubectl port-forward -n demo pod/database-0 27017:27017
+```
+
+# Appendix
+
+
+## Database Security (optional)
+
+This demo does not secure the database beyond preventing external access.  Should you wish to add database authroization/authentication, you can follow these steps:
+
+1) Connect to the database container's console and setup an admin account
 
 ```
 kubectl exec --namespace demo --stdin --tty database-0 -- /bin/bash
@@ -83,28 +123,26 @@ exit
 exit
 ```
 
-## Testing
+2) Edit the following files changing the ` database_connection_string` to `bW9uZ29kYjovL2FkbWluOm1vbmdvZGItazhzLWRlbW9AZGF0YWJhc2Utc2VydmljZToyNzAxNw==`
 
-There is a job that runs to populate the database, the container will remain for log viewing, and should later be removed manaully.  You should wait for this job to complete before proceeding to the remaining steps.
+* helm-chart/charts/values.yaml
+* helm-chart/charts/test-data-management/values.yaml
+* helm-chart/charts/contacts-api/values.yaml
 
-`Chrome on a Mac will not allow self-signed certificates, and will not allow you to proceed to website without clikcing anywhere on the page and typing "thisisunsafe"`
+3) Edit the file `helm-chart/charts/database/templates/database.yaml` changing `args` to `["--dbpath=/data/db", "--bind_ip_all", "--auth"]`
 
-1) You can now connect to the database using any client like [MongoDB Compass](https://www.mongodb.com/products/compass) and the connection string of [mongodb://admin:mongodb-k8s-demo@database.local.com:27017]()
+4) Optionally expose the datbase externally by editing the file `helm-chart/charts/database/templates/database-service.yaml` changing the `type` to `LoadBalancer`
 
-2) You can connect to the message queue admin console using the URL http://queue.local.com:15672, the username of `guest` and the password of `guest`
-
-3) You can connect to the APIs using the URL https://api.local.com/.
-   * This URL will connect to both the contacts and products OpenAPI (swagger) specifications, and allow testing either backend API service.
-
-4) You can connect to the application using the URL https://app.local.com/.
-
-5) If you have NodeJS installed, you can monitor the `event message queue` by running the following command:
+5) Update the helm chart deployment using one of the two commands below based on environment
 
 ```
-node receive-api.js
+helm upgrade demo helm-chart -n demo --set global.env=local,global.domain=local.com --dry-run --debug
+
+helm upgrade demo helm-chart -n demo --set global.env=dev,global.domain=company.com --dry-run --debug
 ```
 
-# Appendix
+The new connection string will be `mongodb://admin:mongodb-k8s-demo@database.local.com:27017` or database.company.com
+
 
 ## Dapr Setup (optional)
 

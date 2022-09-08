@@ -42,7 +42,7 @@ spec:
         - name: QueueConnectionString # same as HostName for QueueType="RabbitMQ"
           value: queue-service
         - name: QueueType # valid options are "AzureServiceBus", "Dapr", or "RabbitMQ"
-          value: Dapr
+          value: RabbitMQ
         - name: TelemetryConnectionString # blank if TelemetryType="Console"
           value: 
         - name: TelemetryType # valid options are "AppInsights", "Console", or "Zipkin"
