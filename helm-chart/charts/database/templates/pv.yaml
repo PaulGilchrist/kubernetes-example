@@ -1,0 +1,24 @@
+{{- if eq .Values.global.env "local" }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{.Chart.Name}}-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{.Chart.Name}}-sc
+  local:
+    path: /Users/Shared/containerStorage/mongodb
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - docker-desktop
+{{- end }}

@@ -1,4 +1,4 @@
-Chart name       = {{ .Chart.Name }}.
+Chart name       = {{.Chart.Name}}.
 Release name     = {{ .Release.Name }}.
 Environment      = {{.Values.global.env}}
 App Url          = https://app.{{.Values.global.domain}}

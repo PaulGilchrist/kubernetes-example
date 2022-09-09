@@ -1,9 +1,0 @@
-{{- if eq .Values.env "local" }}
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: database-sc
-allowVolumeExpansion: true
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
-{{- end }}

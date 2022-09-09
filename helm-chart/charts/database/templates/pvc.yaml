@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{.Chart.Name}}-pvc
+spec:
+{{- if eq .Values.global.env "local" }}
+  volumeName: {{.Chart.Name}}-pv
+  storageClassName: {{.Chart.Name}}-sc
+{{- else }}
+  storageClassName: managed-premium
+{{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+

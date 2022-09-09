@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{.Chart.Name}}-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/cors-allow-methods: "DELETE, GET, OPTIONS, PATCH, POST, PUT"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api.{{.Values.global.domain}}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: {{.Chart.Name}}-service
+              port:
+                number: 80
+  # This section is only required if TLS is to be enabled for the Ingress
+  tls:
+    - hosts:
+      - api.{{.Values.global.domain}}
+      secretName: domain-cert

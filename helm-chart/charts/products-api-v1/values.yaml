@@ -1,0 +1,6 @@
+global:
+  env: local
+  domain: local.com
+image:
+  tag: 1.1.0
+basePath: /products/v1
