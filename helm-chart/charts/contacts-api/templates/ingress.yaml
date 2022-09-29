@@ -14,7 +14,7 @@ spec:
     - host: api.{{.Values.global.domain}}
       http:
         paths:
-        - path: /contacts/(.*)
+        - path: /{{.Values.ingresspath}}/(.*)
           pathType: Prefix
           backend:
             service:

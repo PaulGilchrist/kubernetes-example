@@ -4,3 +4,4 @@ global:
   domain: local.com
 image:
   tag: latest
+ingresspath: contacts
