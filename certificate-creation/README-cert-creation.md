@@ -36,6 +36,6 @@ Example values:
 4) Add one of the following certificates to an K8s secret (choose based on current kubernetes context)
 
 ```
-kubectl create secret tls domain-cert --key local.com.key --cert local.com.crt
-kubectl create secret tls domain-cert --key company.com.key --cert company.com.crt
+kubectl create secret tls domain-cert --key local.com.key --cert local.com.crt -n demo
+kubectl create secret tls domain-cert --key company.com.key --cert company.com.crt -n demo
 ```

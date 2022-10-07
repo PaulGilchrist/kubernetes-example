@@ -26,7 +26,7 @@ All of these projects are available on [Github](https://github.com/PaulGilchrist
    * If you will be installing to Azure Kubernetes Services (AKS) rather than locally, change the IP addresses above to match the AKS ingress gateway for `app`, `api`, and match a dedicated Azure Public IP you have added for the `queue`
 
 
-4) [Install Helm](https://helm.sh/docs/intro/install/) locally then use it to install an `nginx Kubernetes ingress gateway`. **Sometimes Ingress on Mac local Kubernetes will require both resetting Kubernetes and restarting Docker for it to function properly.**
+4) [Install Helm](https://helm.sh/docs/intro/install/) locally then use it to install an `nginx Kubernetes ingress gateway`. **Sometimes Ingress on Mac local Kubernetes will require restarting Docker Desktop for it to function properly.**
 
 ```
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
@@ -50,9 +50,9 @@ kubectl top node
 7) Test a dry run of the templates against your cluster.  Choose one of the below commands with the first one being designed for a local MacOS install, and the second being designed for an Azure Kubernetes Services install.  If choosing to do the AKS install, first setup an Azure Public IP to be used by the queue service and update the below command with that IP.
 
 ```
-helm install demo helm-chart -n demo --create-namespace --set global.env=local,global.domain=local.com --dry-run --debug
+helm upgrade --install demo helm-chart -n demo --create-namespace --set global.env=local,global.domain=local.com --dry-run --debug
 
-helm install demo helm-chart -n demo --create-namespace --set global.env=dev,global.domain=company.com,queue.loadBalancerIP=20.47.116.6 --dry-run --debug
+helm upgrade --install demo helm-chart -n demo --create-namespace --set global.env=dev,global.domain=company.com,queue.loadBalancerIP=20.47.116.6 --dry-run --debug
 ```
 
 8) Apply the templates needed to setup the pod by re-running the above command with `--dry-run --debug` removed.
@@ -141,9 +141,9 @@ helm upgrade demo helm-chart -n demo --set global.env=dev,global.domain=company.
 The new connection string will be `mongodb://admin:mongodb-k8s-demo@database.local.com:27017` or database.company.com
 
 
-## Dapr Setup (optional)
+## Dapr Setup (optional - local - for development)
 
-This demo uses RabbitMQ for messaging, MongoDB for state, and native Kubernetes for telemetry and secrets but if wanting to abstract further with Dapr, follow the below steps.
+This demo uses RabbitMQ for messaging, MongoDB for state, and native Kubernetes for telemetry and secrets but if wanting to abstract further with Dapr, follow the below steps to install locally on your computer.
 
 1) [Install HomeBrew](https://mac.install.guide/homebrew/index.html) (if not already installed)
 
@@ -155,11 +155,24 @@ This demo uses RabbitMQ for messaging, MongoDB for state, and native Kubernetes 
 arch -arm64 brew install dapr/tap/dapr-cli
 ```
 
-4) [Setup Dapr on your Kubernetes cluster](https://github.com/dapr/quickstarts/tree/v1.4.0/hello-kubernetes#step-1---setup-dapr-on-your-kubernetes-cluster) including redis cache as both the state and pubsub store, or choose alternatives to redis such as mongoDB, rabbitMQ, or many others.
+
+## Dapr Setup (optional - kubernetes)
+
+This demo uses RabbitMQ for messaging, MongoDB for state, and native Kubernetes for telemetry and secrets but if wanting to abstract further with Dapr, follow the below steps to install into Kubernetes.
+
+1) [Install HomeBrew](https://mac.install.guide/homebrew/index.html) (if not already installed)
+
+2) Use Homebrew to [install Helm](https://helm.sh/docs/intro/install/) (if not already installed)
+
+3) Setup Dapr on your Kubernetes cluster. Can optionally setup in High Availability mode by adding the command `--set global.ha.enabled=true` to the below Helm install.
 
 ```
-dapr init --kubernetes --wait
-dapr status -k
+// Add the official Dapr Helm chart.
+helm repo add dapr https://dapr.github.io/helm-charts/
+helm repo update
+# See which chart versions are available
+helm search repo dapr --devel --versions
+helm upgrade --install dapr dapr/dapr --version=1.8.4 --namespace dapr-system --create-namespace --wait
 ```
 
 5) Add RabbitMQ exchange named "contacts" of type `fanout` and bind it to a new queue also named "contacts"
